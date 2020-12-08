@@ -1,32 +1,40 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+    <component :is="layout">
+      <router-view />
+    </component>
+  </v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+import AuthLayout from '@/layouts/AuthLayout'
+import MainLayout from '@/layouts/MainLayout'
+export default {
+  name: 'App',
+
+  computed: {
+    layout() {
+      return (this.$route.meta.layout || 'auth') + '-layout'
+    }
+  },
+
+  components: {
+    MainLayout, AuthLayout
+  }
+
+};
+</script>
+
+<style>
+header {
+  border-bottom: 1px solid #e3ebf6 !important;
+}
+.drawer-nav .v-list-item .v-list-item__title {
+  color: #a9baca !important;
+  transition: .3s ease;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.drawer-nav .v-list-item:hover .v-list-item__title, .drawer-nav .v-list-item:hover .v-list-item__icon i {
+  color: #fff !important;
 }
 </style>
