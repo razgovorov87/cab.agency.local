@@ -15,7 +15,7 @@
                                     dense
                                     hide-details
                                     class="d-flex align-center ma-0"
-                                    value="John"
+                                    :value="info.name"
                                 >
                                 </v-text-field>
                             </v-col>
@@ -31,7 +31,7 @@
                                     dense
                                     hide-details
                                     class="d-flex align-center ma-0"
-                                    value="Doe"
+                                    :value="info.secondName"
                                 >
                                 </v-text-field>
                             </v-col>
@@ -47,7 +47,8 @@
                                     dense
                                     hide-details
                                     class="d-flex align-center ma-0"
-                                    value="+7 (123) 456 78-90"
+                                    :value="info.phone"
+                                    v-mask="'+7(###) ###-##-##'"
                                     prepend-inner-icon="mdi-phone"
                                 >
                                 </v-text-field>
@@ -64,7 +65,7 @@
                                     dense
                                     hide-details
                                     class="d-flex align-center ma-0"
-                                    value="johndoe@gmail.com"
+                                    :value="info.email"
                                     prepend-inner-icon="mdi-at"
                                 >
                                 </v-text-field>
@@ -81,7 +82,42 @@
                                     dense
                                     hide-details
                                     class="d-flex align-center ma-0"
-                                    value="Москва"
+                                    :value="info.city"
+                                >
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+
+                        <v-row>
+                            <v-col cols="4" align-self="center">
+                                <p class="text-right ma-0">Вконтакте</p>
+                            </v-col>
+                            <v-col cols="7">
+                                <v-text-field 
+                                    outlined 
+                                    dense
+                                    hide-details
+                                    prepend-inner-icon="mdi-vk"
+                                    class="d-flex align-center ma-0"
+                                    :value="info.socialLinks.vk"
+                                >
+                                </v-text-field>
+                            </v-col>
+                        </v-row>
+                        
+
+                        <v-row>
+                            <v-col cols="4" align-self="center">
+                                <p class="text-right ma-0">Telegram</p>
+                            </v-col>
+                            <v-col cols="7">
+                                <v-text-field 
+                                    outlined 
+                                    dense
+                                    hide-details
+                                    prepend-inner-icon="mdi-telegram"
+                                    class="d-flex align-center ma-0"
+                                    :value="info.socialLinks.telegram"
                                 >
                                 </v-text-field>
                             </v-col>
@@ -99,6 +135,12 @@
             </v-card>
         </v-col>
 </template>
+
+<script>
+export default {
+    props: ['info']
+}
+</script>
 
 <style>
 #personal-form .v-input__prepend-outer {

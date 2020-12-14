@@ -19,11 +19,22 @@
             </v-col>
         </v-row>
 
-        <v-row>
-            <HouseCard />
-            <HouseCard />
-            <HouseCard />
-            <HouseCard />
+        <v-row v-if="loading">
+            <v-col cols="3">
+                <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-col>
+            <v-col cols="3">
+                <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-col>
+            <v-col cols="3">
+                <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-col>
+            <v-col cols="3">
+                <v-skeleton-loader type="card"></v-skeleton-loader>
+            </v-col>
+        </v-row>
+        <v-row v-else>
+            <HouseCard v-for="house of houses" :key="house.id" v-bind:house="house"/>
         </v-row>
     </div>
 </template>
@@ -31,6 +42,29 @@
 <script>
 import HouseCard from '@/components/Profile/HouseCard'
 export default {
+    data: () => ({
+        houses: null,
+        loading: true
+    }),
+
+    async mounted() {
+        this.houses = await this.$store.dispatch('fetchUserHouses')
+        const result = await this.$store.dispatch('fetchHouseResult')
+        this.houses.forEach( (house, idx) => {
+            result.forEach(item => {
+                if(house.id == item.hid) {
+                    this.houses[idx] = {
+                        ...house,
+                        result: item.result,
+                        takenDate: item.createDate
+                    }
+                }
+            })
+        })
+
+        this.loading = false
+    },
+
     components: {
         HouseCard
     }
