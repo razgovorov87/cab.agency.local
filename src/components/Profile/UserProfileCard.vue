@@ -1,10 +1,6 @@
 <template>
 
     <v-card class="profile-card mt-5" elevation="0" style="border: 2px solid #d9e3f1;">
-        <v-img
-            height="250"
-            src="https://i.pinimg.com/originals/f6/ff/11/f6ff11b1d46005a376f6030e4e723be6.jpg"
-        ></v-img>
 
         <v-card-text class="d-flex justify-space-between pl-3 pr-15 align-center">
             <div class="d-flex align-center py-5">
@@ -22,14 +18,14 @@
 
             <v-list dense>
 
-                <v-list-item>
+                <!-- <v-list-item>
                     <v-list-item-icon>
                         <v-icon class="mr-2">mdi-phone-outline</v-icon>
                         <v-list-item-title>
                             <span class="font-weight-bold mr-">Телефон:</span> {{ userInfo.phone }}
                         </v-list-item-title>
                     </v-list-item-icon>
-                </v-list-item>
+                </v-list-item> -->
 
                 <v-list-item>
                     <v-list-item-icon>

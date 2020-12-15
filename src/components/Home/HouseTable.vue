@@ -2,6 +2,10 @@
   <div>
       <v-data-table v-model="houses" :headers="headers" :items="items" :key="refreshTable">
 
+        <template v-slot:item.link="{ item }">
+            <a :href="item.link" target="__blank">{{item.link}}</a>
+        </template>
+
         <template v-slot:item.price="{ item }">
             <span class="overline">{{ item.price | currency }}</span>       
         </template>
@@ -40,15 +44,9 @@ import Snackbar from '@/components/Snackbar'
 export default {
   data: () => ({
     headers: [
-      { text: "Название", value: "title" },
-      { text: "Тип", value: "type" },
-      { text: "Цена", value: "price" },
-      { text: "Аренда", value: "rent" },
-      { text: "Продажа", value: "sale" },
-      { text: "Статус", value: "status" },
-      { text: "Спален", value: "bedrooms" },
-      { text: "Ванных", value: "bethrooms" },
-      {text: '', value: 'button'}
+      { text: "Ссылка на объявление", value: "link"},
+      { text: "Статус", value: "status", align: 'center'},
+      {text: '', value: 'button', align: 'end'}
     ],
     items: [],
     houses: null,
@@ -78,13 +76,11 @@ export default {
                   text: 'Объект успешно добавлен в ваши проекты!',
                   color: 'success'
               }
+              this.$emit('takenHouse', data)
           } catch (e) {
               console.log(e)
           }
       },
-      showSnackbar(data) {
-
-      }
   },
 
   components: {

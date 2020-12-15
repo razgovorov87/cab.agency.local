@@ -15,18 +15,31 @@
       </v-btn>
     </v-card>
 
-    <v-card>
-      <HouseTable />
-    </v-card>
+    <v-row>
+      <v-col cols="8">
+        <v-card>
+          <HouseTable @takenHouse="showSteppers" />
+        </v-card>
+      </v-col>
+    </v-row>
 
+    <v-btn @click="steppersDialog = true">dialog</v-btn>
+
+  <v-dialog v-model="steppersDialog">
+    <v-card>
+      <HomeSteppers />
+    </v-card>
+  </v-dialog>
   </div>
 </template>
 
 <script>
+import HomeSteppers from '@/components/Home/HomeSteppers'
 import HouseTable from '@/components/Home/HouseTable'
 export default {
   name: 'Home',
   data: () => ({
+    steppersDialog: false,
     breadcrumbs: [
         {
             text: 'Медиан',
@@ -41,8 +54,15 @@ export default {
     date: new Date()
   }),
 
+  methods: {
+    showSteppers(data) {
+      console.log(data)
+    }
+  },
+
   components: {
-    HouseTable
+    HouseTable,
+    HomeSteppers
   }
 
 }

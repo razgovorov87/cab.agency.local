@@ -18,7 +18,6 @@
         <UserProfileCard v-bind:userInfo="userInfo" />
         <v-tabs class="mt-5" v-model="tab" style="border-bottom: 1px solid #d9e3f1;" dense>
             <v-tab>Проекты</v-tab>
-            <v-tab>Портфолио</v-tab>
             <v-tab>Настройки</v-tab>
         </v-tabs>
 
@@ -26,7 +25,6 @@
             <v-tab-item>
                 <HouseTab />
             </v-tab-item>
-            <v-tab-item> </v-tab-item>
             <v-tab-item>
                 <SettingsTab v-bind:userInfo="userInfo" />
             </v-tab-item>

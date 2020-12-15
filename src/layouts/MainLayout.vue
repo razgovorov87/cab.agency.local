@@ -78,19 +78,8 @@
     >
       <span class="title d-flex align-center justify-center white--text my-3"><v-icon class="mr-2">mdi-home</v-icon> Медиан</span>
       <v-list dense nav class="drawer-nav">
-        <v-list-item link to="/">
-          <v-list-item-icon>
-            <v-icon color="#a9baca">mdi-home-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Главная</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-icon small color="#a9baca">mdi-chevron-right</v-icon>
-          </v-list-item-action>
-        </v-list-item>
 
-        <v-list-item link to="/profile">
+        <v-list-item link to="/">
           <v-list-item-icon>
             <v-icon color="#a9baca">mdi-account-outline</v-icon>
           </v-list-item-icon>

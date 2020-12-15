@@ -19,12 +19,6 @@ const routes = [
   },
   {
     path: '/',
-    name: 'Home',
-    meta: {layout: 'main', auth: true, info: true},
-    component: () => import('../views/Home.vue')
-  },
-  {
-    path: '/profile',
     name: 'Profile',
     meta: {layout: 'main', auth: true, info: true},
     component: () => import('../views/Profile.vue')

@@ -27,7 +27,7 @@ export default {
         async fetchUserById({dispatch, commit}, id) {
             try {
               const info = (await firebase.database().ref(`/users/${id}/info`).once('value')).val()
-              return info
+              return {...info, id}
             } catch (e) {
                 throw e
             }

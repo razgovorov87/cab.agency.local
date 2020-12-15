@@ -11,38 +11,39 @@ export default {
             }
         },
 
-        async createHouse({dispatch, commit}) {
+        async saveHouseInfo({dispatch, commit}, {formData, decision}) {
             try {
-                await firebase.database().ref(`/houses`).push({
-                    title: '2-х комнатная квартира',
-                    adress: 'г. Москва, ул.Пушкина 143, кв.52',
-                    type: 'Квартира',
-                    price: 200000000,
-                    link: 'http://google.com',
-                    bedrooms: 2,
-                    bethrooms: 1,
-                    createDate: new Date().toJSON(),
-                    status: 'Свободно',
-                    sale: true,
-                    rent: true
+                const uid = await dispatch('getUid')
+                await firebase.database().ref(`/houses/${formData.id}/info`).update(formData)
+                await firebase.database().ref(`/houses/${formData.id}/decision`).update(decision)
+                await firebase.database().ref(`/houses/${formData.id}/`).update({
+                    takenUser: uid,
+                    takenDate: new Date().toJSON()
                 })
             } catch (e) {
                 throw e
             }
         },
 
-
-        async selectHouse({dispatch, commit}, {house, uid, date}) {
+        async successProject({dispatch, commit}, id) {
             try {
-                await firebase.database().ref(`/houses/${house.id}/`).update({
-                    user: uid,
-                    status: 'В обработке'
+                let num = 0
+                const houses = (await firebase.database().ref(`/houses`).once('value')).val()
+                Object.keys(houses).forEach(key => {
+                    if( houses[key].takenUser == id && houses[key].info.status == 'Выполнено') num++
                 })
-                await firebase.database().ref(`/users/${uid}/houses`).push({
-                    hid: house.id,
-                    result: 'В работе',
-                    createDate: date
-                })
+                return num
+            } catch (e) {
+                throw e
+            }
+        },
+
+
+        async takenNewProject({dispatch, commit}) {
+            try {
+                const houses = (await firebase.database().ref(`/houses`).once('value')).val()
+                const idx = Object.keys(houses).find( key => !houses[key].takenUser)
+                return {...houses[idx], id: idx}
             } catch (e) {
                 throw e
             }
@@ -73,7 +74,7 @@ export default {
                 arr = Object.keys(arr).map( key => ( {...arr[key], id: key} ))
                 const result = []
                 arr.forEach( house => {
-                    if(house.user == uid) {
+                    if(house.takenUser == uid) {
                         result.push(house)
                     }
                 } )

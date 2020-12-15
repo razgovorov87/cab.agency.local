@@ -19,54 +19,80 @@
             </v-col>
         </v-row>
 
-        <v-row v-if="loading">
-            <v-col cols="3">
-                <v-skeleton-loader type="card"></v-skeleton-loader>
-            </v-col>
-            <v-col cols="3">
-                <v-skeleton-loader type="card"></v-skeleton-loader>
-            </v-col>
-            <v-col cols="3">
-                <v-skeleton-loader type="card"></v-skeleton-loader>
-            </v-col>
-            <v-col cols="3">
-                <v-skeleton-loader type="card"></v-skeleton-loader>
-            </v-col>
-        </v-row>
-        <v-row v-else>
-            <HouseCard v-for="house of houses" :key="house.id" v-bind:house="house"/>
-        </v-row>
+        <div class="d-flex align-center justify-center mb-3">
+            <v-btn x-large color="primary" @click="takenNewProject()">Взять новый проект</v-btn>
+        </div>
+
+        <div :key="refreshHouseTab">
+            <v-row v-if="loading">
+                <v-col cols="3">
+                    <v-skeleton-loader type="card"></v-skeleton-loader>
+                </v-col>
+                <v-col cols="3">
+                    <v-skeleton-loader type="card"></v-skeleton-loader>
+                </v-col>
+                <v-col cols="3">
+                    <v-skeleton-loader type="card"></v-skeleton-loader>
+                </v-col>
+                <v-col cols="3">
+                    <v-skeleton-loader type="card"></v-skeleton-loader>
+                </v-col>
+            </v-row>
+
+            <div v-else-if="houses && !Object.keys(houses).length" class="d-flex justify-center align-center mt-5">
+                <p class="subtitle-1">У вас нет взятых проектов</p>
+            </div>
+
+            <v-row v-else>
+                <HouseCard v-for="house of houses" :key="house.id" v-bind:house="house"/>
+            </v-row>
+        </div>
+
+
+        <v-dialog v-model="stepperDialog">
+            <v-card>
+                <ProjectStepper v-bind:house="stepperHouse" @success="refresh" @closeDialog="stepperDialog = false"/>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
+import ProjectStepper from '@/components/Profile/ProjectStepper'
 import HouseCard from '@/components/Profile/HouseCard'
 export default {
     data: () => ({
         houses: null,
-        loading: true
+        stepperHouse: {},
+        loading: true,
+        refreshHouseTab: null,
+        stepperDialog: false
     }),
 
     async mounted() {
         this.houses = await this.$store.dispatch('fetchUserHouses')
-        const result = await this.$store.dispatch('fetchHouseResult')
-        this.houses.forEach( (house, idx) => {
-            result.forEach(item => {
-                if(house.id == item.hid) {
-                    this.houses[idx] = {
-                        ...house,
-                        result: item.result,
-                        takenDate: item.createDate
-                    }
-                }
-            })
-        })
 
         this.loading = false
     },
 
+    methods: {
+        async takenNewProject() {
+            this.stepperHouse = await this.$store.dispatch('takenNewProject')
+
+            this.stepperDialog = true
+        },
+        async refresh() {
+            this.loading = true
+            this.houses = await this.$store.dispatch('fetchUserHouses')
+            this.refreshHouseTab++
+            this.stepperDialog = false
+            this.loading = false
+        }
+    },
+
     components: {
-        HouseCard
+        HouseCard,
+        ProjectStepper
     }
 }
 </script>
