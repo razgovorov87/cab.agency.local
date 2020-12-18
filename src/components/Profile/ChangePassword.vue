@@ -82,6 +82,14 @@ export default {
         currentPassword: false,
         newPassword: false,
         confirmPassword: false,
+        photo: ''
     }),
+
+    methods: {
+        async upload() {
+            console.log(this.photo)
+            await this.$store.dispatch('uploadPhoto', this.photo)
+        }
+    }
 }
 </script>

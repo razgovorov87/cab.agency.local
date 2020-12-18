@@ -31,7 +31,7 @@ export default {
             } catch (e) {
                 throw e
             }
-        }
+        },
     },
 
     getters: {

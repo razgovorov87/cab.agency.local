@@ -126,8 +126,11 @@
                         </div>
                     </div>
                     <div v-if="house.decision" class="d-flex justify-center flex-column">
-                        <p v-if="house.decision.decision == 'Перезвонить через N дней'" class="ma-0 my-2 caption">Текущее решение: <v-chip label small color="indigo" class="white--text">Перезвонить через {{house.decision.daysCall}} дней</v-chip></p>
-                        <p v-else class="ma-0 my-2 caption">Текущее решение: <v-chip label small color="indigo" class="white--text">{{ house.decision.decision }}</v-chip></p>
+                        <p v-if="house.decision.decision == 'Перезвонить через N дней'" class="ma-0 my-2 caption">Текущее решение: 
+                            <v-chip label small color="indigo" class="white--text">Перезвонить {{house.decision.daysCall}} в {{house.decision.timeCall}}</v-chip>
+                            </p>
+                        <p v-else class="ma-0 my-2 caption">Текущее решение: <v-chip label small color="indigo" class="white--text">{{ house.decision.decision }}</v-chip>
+                        </p>
                         <p class="ma-0 my-2 caption" v-if="house.decision.comment">Комментарий: {{house.decision.comment}}</p>
                     </div>
                     
@@ -332,6 +335,8 @@ export default {
         return () =>
             (this.select == "Перезвонить через N дней" && this.daysCall != '') || "Обязательное поле";
         },
+
+        
     }
 }
 </script>

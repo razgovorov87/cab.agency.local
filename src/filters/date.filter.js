@@ -6,5 +6,10 @@ export default function dateFilter(value, format = 'date') {
         options.day = '2-digit'
     }
 
+    if ( format.includes('fullmonthDay') ) {
+        options.month = 'long'
+        options.day = '2-digit'
+    }
+
     return Intl.DateTimeFormat('ru-RU', options).format(new Date(value))
 }

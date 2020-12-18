@@ -105,7 +105,7 @@
             </v-list-item-action>
           </v-list-item>
 
-          <v-list-item link to="/admin/users">
+          <v-list-item link to="/admin/users" disabled>
             <v-list-item-icon>
               <v-icon color="#a9baca">mdi-account-group-outline</v-icon>
             </v-list-item-icon>
@@ -122,12 +122,12 @@
 
       <template v-slot:append>
         <div class="d-flex justify-space-between align-center" :class="!drawer ? 'px-5' : 'px-1'">
-          <v-avatar >
-            <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="" />
+          <v-avatar class="grey lighten-1">
+            <v-icon>mdi-account</v-icon>
           </v-avatar>
 
           <v-btn icon @click="logout()">
-            <v-icon>mdi-logout</v-icon>
+            <v-icon color="white">mdi-logout</v-icon>
           </v-btn>
         </div>
       </template>

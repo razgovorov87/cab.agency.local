@@ -12,7 +12,8 @@
                 </v-badge>
                 <div class="user-info d-flex flex-column ml-5 mt-3">
                     <span class="title font-weight-bold black--text">{{ userInfo.name + ' ' + userInfo.secondName }}</span>
-                    <p class="body-2">{{ userInfo.job }}</p>
+                    <p class="body-2" v-if="successProject == 1">{{successProject}} выполненный проект</p>
+                    <p class="body-2" v-else>{{successProject}} выполненных проектов</p>
                 </div>
             </div>
 
@@ -36,7 +37,16 @@
                     </v-list-item-icon>
                 </v-list-item>
 
-                <div v-if="userInfo.socialLinks">
+                <v-list-item>
+                        <v-list-item-icon>
+                            <v-icon class="mr-2">mdi-city</v-icon>
+                            <v-list-item-title>
+                                <span class="font-weight-bold mr-">Город:</span> {{ userInfo.city }}
+                            </v-list-item-title>
+                        </v-list-item-icon>
+                    </v-list-item>
+
+                <div v-if="userInfo.socialLinks && (userInfo.socialLinks.vk || userInfo.socialLinks.telegram)">
                     <v-list-item v-if="userInfo.socialLinks.vk">
                         <v-list-item-icon>
                             <v-icon class="mr-2">mdi-vk</v-icon>
@@ -54,6 +64,7 @@
                             </v-list-item-title>
                         </v-list-item-icon>
                     </v-list-item>
+
                 </div>
 
             </v-list>
@@ -83,6 +94,15 @@
 
 <script>
 export default {
-    props: ['userInfo']
+    props: ['userInfo'],
+
+    data: () => ({
+        successProject: null
+    }),
+
+    async mounted() {
+        const uid = await this.$store.dispatch('getUid')
+        this.successProject = await this.$store.dispatch('successProject', uid)
+    }
 }
 </script>

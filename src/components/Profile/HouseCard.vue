@@ -1,126 +1,259 @@
 <template>
-    <v-col cols="3">
-                <v-card elevation="0" style="border: 1px solid #d9e3f1;"  @click="$router.push('/houses/' + house.id)">
-                    <div class="card-header pa-3">
-                        <p class="overline primary--text ma-0">{{house.info.type}}</p>
-                        <v-card-title class="font-weight-black pa-0 mb-2"> <v-icon color="black">mdi-map-marker</v-icon> {{house.info.adress}}</v-card-title>
-                    </div>
-                    <v-img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" width="100%" height="250px" class="pa-3">
-                        <v-chip color="#4192F2" class="ml-2 white--text overline" v-if="house.info.rentPrice">Аренда</v-chip>
-                        <v-chip color="#F74C55" class="ml-2 white--text overline" v-if="house.info.salePrice">Продажа</v-chip>
-                    </v-img>
-                    <v-card-text class="px-3">
-                        <div style="border-bottom: 1px solid #d9e3f1;" class="pa-2 d-flex justify-space-around">
-                            <p v-if="house.info.bedrooms" class="house-option ma-0 subtitle-2">
-                                    Спален: {{house.info.bedrooms}}
-                            </p>
-                            <p v-if="house.info.bethrooms" class="house-option ma-0 subtitle-2">
-                                    Ванных: {{house.info.bethrooms}}
-                            </p>
-                            <p class="house-option ma-0 subtitle-2">
-                                    м<sup>2</sup>: {{house.info.area}}
-                            </p>
-                        </div>
-                        <div class="house-currency d-flex justify-space-around align-center mt-5 mb-3">
-                            <div v-if="house.info.salePrice" class="currency">
-                                <p class="headline black--text ma-0">{{ house.info.salePrice | currency('RUB')}}</p>
-                                <p class="body-2 ma-0">{{ (house.info.salePrice / house.info.area) | currency('RUB') }} / м<sup>2</sup> </p>
-                            </div>
-                            <div v-else class="currency">
-                                <p class="headline black--text ma-0">{{ house.info.rentPrice | currency('RUB')}}</p>
-                                <p class="body-2 ma-0">в месяц</p>
-                            </div>
-                            <div class="buttons">
-                                <v-btn icon outlined color="primary" class="mr-2" :href="house.link" target="__blank">
-                                    <v-icon>mdi-open-in-new</v-icon>
-                                </v-btn>
-                                <v-btn icon outlined color="error" disabled>
-                                    <v-icon>mdi-heart-outline</v-icon>
-                                </v-btn>
-                            </div>
-                        </div>
-                    </v-card-text>
-                    <div class="house-footer grey lighten-3 pa-5 d-flex justify-space-between align-center">
-                        <div class="house-status">
-                            <v-avatar :class="house.info.status == 'Выполнено' ? 'success' : 'warning'">
-                                <v-icon color="white">
-                                    {{ house.info.status == 'Выполнено' ? 'mdi-check' : 'mdi-clock-outline' }}
-                                </v-icon>
-                            </v-avatar>
-                            <span class="overline ml-2" :class="house.info.status == 'Выполнено' ? 'success--text' : 'warning--text'">{{house.info.status}}!</span>
-                        </div>
-                        <div class="status-calendar">
-                            <v-icon small color="grey">mdi-calendar</v-icon>
-                            <span class="body-2 ml-1 grey-darken-1=-text">{{getDaysAgo}}</span>
-                        </div>
-                    </div>
-                </v-card>
-            </v-col>
+  <v-col cols="3">
+    <v-card
+      v-if="house.info"
+      elevation="0"
+      style="border: 1px solid #d9e3f1"
+      @click="$router.push('/houses/' + house.id)"
+    >
+      <div class="card-header pa-3">
+        <div class="d-flex justify-space-between">
+          <p class="overline primary--text ma-0">{{ house.info.type }}</p>
+          <div>
+            <v-chip
+              small
+              color="#4192F2"
+              class="ml-2 white--text overline text-center"
+              v-if="house.info.rentPrice"
+              >Аренда</v-chip
+            >
+            <v-chip
+              small
+              color="#F74C55"
+              class="ml-2 white--text overline text-center"
+              v-if="house.info.salePrice"
+              >Продажа</v-chip
+            >
+          </div>
+        </div>
+        <v-card-title class="font-weight-black pa-0">
+          <v-icon color="black">mdi-map-marker</v-icon>
+          {{ house.info.adress }}
+        </v-card-title>
+      </div>
+      <v-card-text class="px-3">
+        <div
+          style="border-bottom: 1px solid #d9e3f1"
+          class="pa-2 d-flex justify-space-around"
+        >
+          <p v-if="house.info.bedrooms" class="house-option ma-0 subtitle-2">
+            Спален: {{ house.info.bedrooms }}
+          </p>
+          <p v-if="house.info.bethrooms" class="house-option ma-0 subtitle-2">
+            Ванных: {{ house.info.bethrooms }}
+          </p>
+          <p class="house-option ma-0 subtitle-2">
+            м<sup>2</sup>: {{ house.info.area }}
+          </p>
+        </div>
+        <div
+          class="house-currency d-flex justify-space-around align-center mt-5 mb-3"
+        >
+          <div v-if="house.info.salePrice" class="currency">
+            <p class="headline black--text ma-0">
+              {{ house.info.salePrice | currency("RUB") }}
+            </p>
+            <p class="body-2 ma-0">
+              {{ (house.info.salePrice / house.info.area) | currency("RUB") }} /
+              м<sup>2</sup>
+            </p>
+          </div>
+          <div v-else class="currency">
+            <p class="headline black--text ma-0">
+              {{ house.info.rentPrice | currency("RUB") }}
+            </p>
+            <p class="body-2 ma-0">в месяц</p>
+          </div>
+          <div class="buttons">
+            <v-btn
+              icon
+              outlined
+              color="primary"
+              class="mr-2"
+              :href="house.link"
+              target="__blank"
+            >
+              <v-icon>mdi-open-in-new</v-icon>
+            </v-btn>
+            <v-btn icon outlined color="error" disabled>
+              <v-icon>mdi-heart-outline</v-icon>
+            </v-btn>
+          </div>
+        </div>
+      </v-card-text>
+      <div
+        class="house-footer grey lighten-3 pa-5 d-flex justify-space-between align-center"
+      >
+        <div class="house-status">
+          <v-avatar
+            :class="house.status == 'Выполнено' ? 'success' : 'warning'"
+          >
+            <v-icon color="white">
+              {{
+                house.status == "Выполнено" ? "mdi-check" : "mdi-clock-outline"
+              }}
+            </v-icon>
+          </v-avatar>
+          <span
+            class="overline ml-2"
+            :class="
+              house.status == 'Выполнено' ? 'success--text' : 'warning--text'
+            "
+            >{{ house.status }}!</span
+          >
+        </div>
+        <div class="status-calendar">
+          <v-icon small color="grey">mdi-calendar</v-icon>
+          <span class="body-2 ml-1 grey-darken-1=-text">{{ getDaysAgo }}</span>
+        </div>
+      </div>
+    </v-card>
+    <v-card v-else elevation="0" style="border: 1px solid #d9e3f1">
+      <div class="card-header pa-3">
+        <a
+          class="caption primary--text ma-0"
+          :href="house.link"
+          target="__blank"
+          >{{ house.link.slice(0, 40) + "..." }}</a
+        >
+      </div>
+      <v-img
+        src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+        width="100%"
+        height="250px"
+        class="pa-3"
+      >
+      </v-img>
+      <v-card-text class="d-flex justify-space-between">
+        <v-chip color="primary"
+          >Перезвонить {{ house.decision.daysCall | date("FullmonthDay") }} в
+          {{ house.decision.timeCall }}</v-chip
+        >
+        
+        <v-btn @click="editHouse(house)" rounded color="warning">
+          <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+      </v-card-text>
+      <div
+        class="house-footer grey lighten-3 pa-5 d-flex justify-space-between align-center"
+      >
+        <div class="house-status">
+          <v-avatar
+            :class="house.status == 'Выполнено' ? 'success' : 'warning'"
+          >
+            <v-icon color="white">
+              {{
+                house.status == "Выполнено" ? "mdi-check" : "mdi-clock-outline"
+              }}
+            </v-icon>
+          </v-avatar>
+          <span
+            class="overline ml-2"
+            :class="
+              house.status == 'Выполнено' ? 'success--text' : 'warning--text'
+            "
+            >{{ house.status }}!</span
+          >
+        </div>
+        <div class="status-calendar">
+          <v-icon small color="grey">mdi-calendar</v-icon>
+          <span class="body-2 ml-1 grey-darken-1=-text">{{ getDaysAgo }}</span>
+        </div>
+      </div>
+    </v-card>
+  </v-col>
 </template>
 
 <script>
 export default {
-    props: ['house'],
+  props: ["house"],
 
-    computed: {
-        getDaysAgo() {
-            const taken = this.$moment(this.house.takenDate)
-            const today = this.$moment()
+  methods: {
+    editHouse(house) {
+      this.$emit("editHouse", house);
+    },
+  },
 
-            let ago = today.diff(taken, 'days')
-            if(ago !== 0) {
-                 switch(ago) {
-                    case 1: ago = ago + ' день назад'; break; 
-                    case 2: 
-                    case 3:
-                    case 4: ago = ago + ' дня назад'; break;
-                    case 5: 
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9:
-                    case 10: ago = ago + ' дней назад'; break;
-                    default: ago = ago + ' дня(ей) назад'; break;
-                }
-            } else {
-                ago = today.diff(taken, 'hour')
-                if( ago !== 0) {
-                    switch(ago) {
-                        case 1: ago = ago + ' час назад'; break; 
-                        case 2: 
-                        case 3:
-                        case 4: ago = ago + ' часа назад'; break;
-                        case 5: 
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10: ago = ago + ' часов назад'; break;
-                        default: ago = ago + ' час(ов) назад'; break;
-                    }
-                } else {
-                    ago = today.diff(taken, 'minute')
-                    switch(ago) {
-                        case 1: ago = ago + ' минуту назад'; break; 
-                        case 2: 
-                        case 3:
-                        case 4: ago = ago + ' минуты назад'; break;
-                        case 5: 
-                        case 6:
-                        case 7:
-                        case 8:
-                        case 9:
-                        case 10: ago = ago + ' минут назад'; break;
-                        default: ago = ago + ' минут(ы) назад'; break;
-                    }
-                }
-            }
+  computed: {
+    getDaysAgo() {
+      const taken = this.$moment(this.house.takenDate);
+      const today = this.$moment();
 
-            return ago
-
-
+      let ago = today.diff(taken, "days");
+      if (ago !== 0) {
+        switch (ago) {
+          case 1:
+            ago = ago + " день назад";
+            break;
+          case 2:
+          case 3:
+          case 4:
+            ago = ago + " дня назад";
+            break;
+          case 5:
+          case 6:
+          case 7:
+          case 8:
+          case 9:
+          case 10:
+            ago = ago + " дней назад";
+            break;
+          default:
+            ago = ago + " дня(ей) назад";
+            break;
         }
-    }
+      } else {
+        ago = today.diff(taken, "hour");
+        if (ago !== 0) {
+          switch (ago) {
+            case 1:
+              ago = ago + " час назад";
+              break;
+            case 2:
+            case 3:
+            case 4:
+              ago = ago + " часа назад";
+              break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+              ago = ago + " часов назад";
+              break;
+            default:
+              ago = ago + " час(ов) назад";
+              break;
+          }
+        } else {
+          ago = today.diff(taken, "minute");
+          switch (ago) {
+            case 1:
+              ago = ago + " минуту назад";
+              break;
+            case 2:
+            case 3:
+            case 4:
+              ago = ago + " минуты назад";
+              break;
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+              ago = ago + " минут назад";
+              break;
+            default:
+              ago = ago + " минут(ы) назад";
+              break;
+          }
+        }
+      }
 
-}
+      return ago;
+    },
+  },
+};
 </script>

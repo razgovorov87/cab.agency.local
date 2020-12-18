@@ -1,70 +1,103 @@
 <template>
   <div>
       <v-skeleton-loader v-if="loading" type="table"></v-skeleton-loader>
-      <v-data-table v-else-if="items.length != 0" v-model="houses" :headers="headers" :items="items" :key="refreshTable">
-          
-        <template v-slot:top>
-            <v-toolbar flat>
-                <v-spacer></v-spacer>
-                <v-dialog v-model="addNewProjectDialog">
-                    <template v-slot:activator="{ on }">
-                        <v-btn outlined color="primary" v-on="on"><v-icon class="mr-2">mdi-plus</v-icon> Добавить новый</v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>Добавление нового проекта</v-card-title>
-                        <v-card-text>
-                            <AddNewProjectForm  v-on:closeDialog="addNewProjectDialog = false"/>
-                        </v-card-text>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
+      <v-data-table v-model="houses" :headers="headers" :items="items" :key="refreshTable" group-by="status" locale="ru-RU" hide-default-footer disable-pagination>
+
+        <template v-slot:group.header="{ group, toggle, isOpen, items }">
+            <td colspan="8">
+                <v-btn @click="toggle" icon>
+                    <v-icon>{{ isOpen ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
+                </v-btn>
+                <span v-if="group == 'В работе'">
+                    <v-chip class="overline mr-2" color="warning">{{group}}</v-chip> Кол-во: {{items.length}}
+                </span>
+                <span v-else-if="group == 'Выполнено'">
+                    <v-chip  class="overline mr-2" color="success">{{group}}</v-chip> Кол-во: {{items.length}}
+                </span>
+                <span v-else-if="group == 'Свободно'">
+                    <v-chip class="overline mr-2" color="secondary">{{group}}</v-chip> Кол-во: {{items.length}}
+                </span>
+            </td>
         </template>
 
-        <template v-slot:item.price="{ item }">
-            <span class="overline">{{ item.price | currency }}</span>       
-        </template>
-
-        <template v-slot:item.rent="{ item }">
-            <v-icon v-if="item.rent" color="success">mdi-check</v-icon>
-            <v-icon v-else color="error">mdi-close</v-icon>      
-        </template>
-
-        <template v-slot:item.sale="{ item }">
-            <v-icon v-if="item.sale" color="success">mdi-check</v-icon>
-            <v-icon v-else color="error">mdi-close</v-icon>      
-        </template>
-
-        <template v-slot:item.status="{ item }">
-            <v-chip v-if="item.status == 'Свободно'" color="success">
-                {{ item.status }}
-            </v-chip>
-            <v-chip v-if="item.status == 'В обработке'" color="warning">
-                {{ item.status }}
-            </v-chip>       
-        </template>
-
-        <template v-slot:item.actions="{ item }">
-            <v-btn icon small>
-                <v-icon color="warning" small>mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn icon small>
-                <v-icon color="error" small>mdi-delete</v-icon>
-            </v-btn>
+        <template v-slot:item="{ item }">
+            <tr v-if="item.status == 'Выполнено'">
+                <td>
+                    <router-link :to="'/houses/' + item.id" target="__blank">{{item.info.adress}}</router-link>
+                </td>
+                <td><v-icon color="success">mdi-check</v-icon></td>
+                <td class="caption">{{item.info.type}}</td>
+                <td v-if="item.info.rentPrice">{{item.info.rentPrice | currency}}</td>
+                <td v-else>
+                    <v-icon color="error">mdi-close</v-icon>
+                </td>
+                <td v-if="item.info.salePrice">{{item.info.salePrice | currency}}</td>
+                <td v-else>
+                    <v-icon color="error">mdi-close</v-icon>
+                </td>
+                <td>{{item.info.bedrooms}}</td>
+                <td>{{item.info.bethrooms}}</td>
+                <td>
+                    <v-btn icon x-small class="mr-1">
+                        <v-icon color="warning" @click="editItem(item, item.id)">mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn icon x-small @click="deleteItem(item, item.id)">
+                        <v-icon color="error">mdi-delete</v-icon>
+                    </v-btn>
+                </td>
+            </tr>
+            <tr v-else-if="item.status == 'В работе'">
+                <td colspan="2" class="py-3">
+                    <v-btn class="overline" rounded outlined color="primary" :href="item.link" target="__blank"><v-icon color="primary" class="mr-2">mdi-open-in-new</v-icon> Ссылка на объявление</v-btn>
+                </td>
+                <td>
+                    <v-chip label color="primary" v-if="item.decision.decision == 'Перезвонить через N дней'">Перезвонить {{item.decision.daysCall | date('fullmonthDay')}} в {{item.decision.timeCall}}</v-chip>
+                </td>
+                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{item.takenUser}}</router-link></td>
+                <td colspan="2"></td>
+                <td>
+                    <v-btn icon x-small class="mr-1">
+                        <v-icon color="warning" @click="editItem(item, item.id)">mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn icon x-small>
+                        <v-icon color="error" @click="deleteItem(item, item.id)">mdi-delete</v-icon>
+                    </v-btn>
+                </td>
+            </tr>
+            <tr v-else-if="item.status == 'Свободно'">
+                <td colspan="9" class="py-3">
+                    <v-btn class="overline" rounded outlined color="primary"><v-icon color="primary" class="mr-2">mdi-open-in-new</v-icon> Ссылка на объявление</v-btn>
+                </td>
+            </tr>
         </template>
     </v-data-table>
+    <v-dialog v-model="dialogDelete" max-width="500px">
+        <v-card>
+            <v-card-title class="title">Вы уверены что хотите удалить этот проект?</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" @click="deleteItemConfirm" :loading="loadingBtn">Подтвердить</v-btn>
+              <v-btn color="error" text @click="dialogDelete = false">Отмена</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogEdit" persistent>
+        <DialogEdit v-bind:project="editedItem" @closeDialog="dialogEdit = false" @success="refresh" :key="refreshEditDialog"/>
+    </v-dialog>
     <Snackbar v-bind:options="snackbarOptions" :key="snackbarOptions"/>
   </div>
 </template>
 
 <script>
-import AddNewProjectForm from '@/components/Admin/AddNewProjectForm.vue'
+import DialogEdit from '@/components/Admin/DialogEdit'
 import Snackbar from '@/components/Snackbar'
 export default {
   data: () => ({
     headers: [
-      { text: "Название", value: "title" },
+      { text: "Адресс", value: "title" },
+      { text: "Решение", value: "decision" },
       { text: "Тип", value: "type" },
-      { text: "Цена(продажа)", value: "price" },
       { text: "Аренда", value: "rent" },
       { text: "Продажа", value: "sale" },
       { text: "Статус", value: "status" },
@@ -76,22 +109,53 @@ export default {
     houses: null,
     refreshTable: null,
     snackbarOptions: null,
-    addNewProjectDialog: false,
-    loading: true
+    loading: true,
+    dialogDelete: false,
+    dialogEdit: false,
+    loadingBtn: false,
+    editedItem: null,
+    editedIndex: null,
+    refreshEditDialog: 0
   }),
+    
+  methods: {
+      async refresh() {
+          this.loading = true
+          this.items = await this.$store.dispatch("fetchHouses")
+          this.loading = false
+      },
+      editItem(item, id) {
+        this.refreshEditDialog++
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = this.items[this.editedIndex]
+        this.dialogEdit = true
+      },
+      deleteItem(item, id) {
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = this.items[this.editedIndex]
+        this.dialogDelete = true
+      },
+      async deleteItemConfirm() {
+        this.loadingBtn = true
+        this.items.splice(this.editedIndex, 1)
+        try {
+            await this.$store.dispatch('deleteHouse', this.editedItem)
+            this.loadingBtn = false
+            this.editedIndex = -1
+            this.editedItem = null
+            this.dialogDelete = false
+        } catch(e) {console.log(e)}
+      }
+  },
 
-  async created() {
-    console.log(this.items.length)
+  async mounted() {
     this.items = await this.$store.dispatch("fetchHouses")
     this.loading = false
   },
 
-  methods: {
-
-  },
 
   components: {
-      Snackbar, AddNewProjectForm
+      Snackbar, DialogEdit
   }
 };
 </script>

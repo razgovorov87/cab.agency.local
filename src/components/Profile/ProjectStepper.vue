@@ -8,13 +8,13 @@
       <v-divider></v-divider>
 
       <v-stepper-step :complete="stepper > 2" step="2">
-        Заполнение информации
+        Решение
       </v-stepper-step>
 
       <v-divider></v-divider>
 
       <v-stepper-step :complete="stepper > 3" step="3">
-        Отправка решения
+        Заполнение информации
       </v-stepper-step>
     </v-stepper-header>
     <v-stepper-items>
@@ -38,11 +38,91 @@
         </v-card>
         <div class="d-flex justify-end">
           <v-btn class="mr-3" color="primary" @click="stepper = 2">Далее</v-btn>
-          <v-btn color="error" @click="$emit('closeDialog')">Отмена</v-btn>
+          <v-btn color="error" @click="closeDialog">Отмена</v-btn>
         </div>
       </v-stepper-content>
 
       <v-stepper-content step="2" class="pa-5">
+        <v-card
+          class="d-flex flex-column justify-center"
+          min-height="400px"
+          elevation="0"
+        >
+          <div class="get-link d-flex flex-column align-center">
+            <div style="min-width: 500px">
+              <v-form ref="decisionform">
+                <v-select
+                  v-model="select"
+                  :items="selectItems"
+                  :rules="selectRules"
+                  required
+                  outlined
+                  dense
+                  placeholder="Выберите нужный вариант"
+                ></v-select>
+                <div v-if="select == 'Перезвонить через N дней'">
+                  <v-text-field
+                    v-model="daysCall"
+                    :rules="[checkDays]"
+                    type="date"
+                    outlined
+                    dense
+                    placeholder="Когда перезвонить?"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="timeCall"
+                    :rules="[checkDays]"
+                    type="time"
+                    outlined
+                    dense
+                    placeholder="Когда перезвонить?"
+                  ></v-text-field>
+                </div>
+                <div v-if="select == 'Больше не звонить, назначенна встреча'">
+                  <v-text-field
+                    v-model="dateMeeting"
+                    :rules="[checkSelect]"
+                    outlined
+                    dense
+                    type="date"
+                    placeholder="Дата встречи"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="whoMeeting"
+                    :rules="[checkSelect]"
+                    dense
+                    outlined
+                    placeholder="С кем назначенна встреча"
+                  ></v-text-field>
+                  <v-text-field
+                    v-model="placeMeeting"
+                    :rules="[checkSelect]"
+                    dense
+                    outlined
+                    placeholder="Место встречи"
+                  ></v-text-field>
+                </div>
+                <v-textarea
+                  v-model="comment"
+                  outlined
+                  placeholder="Комментарий"
+                ></v-textarea>
+              </v-form>
+            </div>
+            <span class="caption"
+              >Решение можно будет поменять на странице проекта в вашем
+              профиле</span
+            >
+          </div>
+        </v-card>
+
+        <div class="d-flex justify-end">
+          <v-btn class="mr-3" color="primary" @click="saveDecision()">Отправить</v-btn>
+          <v-btn color="error" @click="closeDialog">Отмена</v-btn>
+        </div>
+      </v-stepper-content>
+
+      <v-stepper-content step="3" class="pa-5">
         <v-card height="400px" elevation="0">
           <v-form ref="addnewprojectform">
             <v-row>
@@ -79,7 +159,7 @@
                   hide-details
                   outlined
                   dense
-                  placeholder="Адресс"
+                  placeholder="Адрес"
                 ></v-text-field>
               </v-col>
               <v-col cols="3">
@@ -204,90 +284,16 @@
             </div>
           </v-form>
         </v-card>
-        <div class="d-flex justify-end">
-          <v-btn class="mr-3" color="primary" @click="verifyForm">Далее</v-btn>
-          <v-btn color="error" @click="$emit('closeDialog')">Отмена</v-btn>
-        </div>
-      </v-stepper-content>
-
-      <v-stepper-content step="3" class="pa-5">
-        <v-card
-          class="d-flex flex-column justify-center"
-          min-height="400px"
-          elevation="0"
-        >
-          <div class="get-link d-flex flex-column align-center">
-            <p class="ma-0 body-2 mb-3">
-              Информация о проекта сохранена, осталось связаться с продавцом и
-              заполнить форму ниже!
-            </p>
-            <div style="min-width: 500px">
-              <v-form ref="forminfo">
-                <v-select
-                  v-model="select"
-                  :items="selectItems"
-                  :rules="selectRules"
-                  required
-                  outlined
-                  dense
-                  placeholder="Выберите нужный вариант"
-                ></v-select>
-                <div v-if="select == 'Перезвонить через N дней'">
-                  <v-text-field
-                    v-model="daysCall"
-                    :rules="[checkDays]"
-                    outlined
-                    dense
-                    type="number"
-                    placeholder="Через сколько дней перезвонить?"
-                  ></v-text-field>
-                </div>
-                <div v-if="select == 'Больше не звонить, назначенна встреча'">
-                  <v-text-field
-                    v-model="dateMeeting"
-                    :rules="[checkSelect]"
-                    outlined
-                    dense
-                    type="date"
-                    placeholder="Дата встречи"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="whoMeeting"
-                    :rules="[checkSelect]"
-                    dense
-                    outlined
-                    placeholder="С кем назначенна встреча"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="placeMeeting"
-                    :rules="[checkSelect]"
-                    dense
-                    outlined
-                    placeholder="Место встречи"
-                  ></v-text-field>
-                </div>
-                <v-textarea
-                  v-model="comment"
-                  outlined
-                  placeholder="Комментарий"
-                ></v-textarea>
-              </v-form>
-            </div>
-            <span class="caption"
-              >Решение можно будет поменять на странице проекта в вашем
-              профиле</span
-            >
-          </div>
-        </v-card>
-        <div class="d-flex justify-end">
+        <div class="d-flex justify-end align-center">
+          <span class="caption mr-3 grey--text">Если вы не готовы сейчас заполнить информацию по квартире, вернитесь на шаг назад и поставьте старое решение</span>
           <v-btn
             class="mr-3"
             color="primary"
-            @click="saveHouseInfo()"
+            @click="verifyForm"
             :loading="loadingBtn"
             >Отправить</v-btn
           >
-          <v-btn color="error" @click="$emit('closeDialog')">Отмена</v-btn>
+          <v-btn color="error" @click="stepper = 2">Назад</v-btn>
         </div>
       </v-stepper-content>
     </v-stepper-items>
@@ -316,7 +322,7 @@ export default {
     phoneRules: [(v) => !!v || "Обязательное поле"],
     sale: "",
     rent: "",
-    ariConditioning: false,
+    airConditioning: false,
     alarmSystem: false,
     kidsCourt: false,
     refrigerator: false,
@@ -334,28 +340,27 @@ export default {
       "Больше не звонить, назначенна встреча",
     ],
     selectRules: [(v) => !!v || "Обязательное поле"],
-    dateMeeting: null,
-    whoMeeting: null,
-    placeMeeting: null,
-    daysCall: null,
-    comment: null,
+    dateMeeting: '',
+    whoMeeting: '',
+    placeMeeting: '',
+    daysCall: '',
+    timeCall: '',
+    comment: '',
     loadingBtn: false,
   }),
 
   methods: {
-    verifyForm() {
-      if (this.$refs.addnewprojectform.validate()) {
-        this.stepper = 3;
-      }
+    closeDialog() {
+      $emit('closeDialog')
+      this.stepper = 1
     },
 
-    async saveHouseInfo() {
-      if (this.$refs.forminfo.validate()) {
+    async verifyForm() {
+      if (this.$refs.addnewprojectform.validate()) {
         this.loadingBtn = true;
         const formData = {
           id: this.house.id,
           link: this.house.link,
-          status: this.select == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
           phone: this.phone,
           type: this.type,
           adress: this.adress,
@@ -365,7 +370,7 @@ export default {
           salePrice: this.sale,
           rentPrice: this.rent,
           features: {
-            airConditioning: this.ariConditioning,
+            airConditioning: this.airConditioning,
             alarmSystem: this.alarmSystem,
             kidsCourt: this.kidsCourt,
             refrigerator: this.refrigerator,
@@ -377,10 +382,26 @@ export default {
             WiFi: this.WiFi,
             hob: this.hob,
           },
-        };
+        }
+        
+
+        await this.$store.dispatch('saveHouseInfo', formData)
+        this.loadingBtn = false
+        this.$emit("success")
+        
+
+      }
+    },
+
+    async saveDecision() {
+      if (this.$refs.decisionform.validate()) {
+        this.loadingBtn = true;
+        
         const decision = {
+          id: this.house.id,
           decision: this.select,
           daysCall: this.daysCall,
+          timeCall: this.timeCall,
           dateMeeting: this.dateMeeting,
           whoMeeting: this.whoMeeting,
           placeMeeting: this.placeMeeting,
@@ -388,9 +409,14 @@ export default {
         };
 
         try {
-          await this.$store.dispatch("saveHouseInfo", { formData, decision });
-          this.loadingBtn = false;
-          this.$emit("success");
+          await this.$store.dispatch("saveDecision", decision);
+          if( decision.decision == 'Больше не звонить, назначенна встреча' ) {
+            this.stepper = 3;
+            this.loadingBtn = false;
+          } else {
+            this.loadingBtn = false;
+            this.$emit("success");
+          }
         } catch (e) {
           console.log(e);
         }
@@ -408,12 +434,16 @@ export default {
 
     checkSelect() {
       return () =>
-        (this.select == "Перезвонить через N дней" && (this.dateMeeting != '' || this.placeMeeting != '' || this.whoMeeting != '') ) ||
+        (this.select == "Больше не звонить, назначенна встреча" &&
+          (this.dateMeeting != "" ||
+            this.placeMeeting != "" ||
+            this.whoMeeting != "")) ||
         "Обязательное поле";
     },
     checkDays() {
       return () =>
-        (this.select == "Перезвонить через N дней" && this.daysCall != '') || "Обязательное поле";
+        (this.select == "Перезвонить через N дней" && this.daysCall != "" && this.timeCall != "") ||
+        "Обязательное поле";
     },
   },
 };

@@ -44,12 +44,12 @@
             </div>
 
             <v-row v-else>
-                <HouseCard v-for="house of houses" :key="house.id" v-bind:house="house"/>
+                <HouseCard v-for="house of houses" :key="house.id" v-bind:house="house" @editHouse="editHouse"/>
             </v-row>
         </div>
 
 
-        <v-dialog v-model="stepperDialog">
+        <v-dialog v-model="stepperDialog" persistent>
             <v-card>
                 <ProjectStepper v-bind:house="stepperHouse" @success="refresh" @closeDialog="stepperDialog = false"/>
             </v-card>
@@ -70,7 +70,7 @@ export default {
     }),
 
     async mounted() {
-        this.houses = await this.$store.dispatch('fetchUserHouses')
+        this.houses = (await this.$store.dispatch('fetchUserHouses')).reverse()
 
         this.loading = false
     },
@@ -78,15 +78,19 @@ export default {
     methods: {
         async takenNewProject() {
             this.stepperHouse = await this.$store.dispatch('takenNewProject')
-
             this.stepperDialog = true
         },
         async refresh() {
+            console.log('refresh')
             this.loading = true
-            this.houses = await this.$store.dispatch('fetchUserHouses')
+            this.houses = (await this.$store.dispatch('fetchUserHouses')).reverse()
             this.refreshHouseTab++
             this.stepperDialog = false
             this.loading = false
+        },
+        editHouse(house) {
+            this.stepperHouse = house
+            this.stepperDialog = true
         }
     },
 

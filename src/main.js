@@ -12,6 +12,7 @@ import moment from 'moment';
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
+import 'firebase/storage'
 
 
 Vue.prototype.$moment = moment;

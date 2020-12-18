@@ -20,32 +20,39 @@ export default {
             } catch (e) {throw e}
         },
 
-        async saveUserInfo({dispatch, commit}, {uid, name, secondName, phone, city, socialLinks, fromSource}) {
+        async saveUserInfo({dispatch, commit}, {formData, passport}) {
             try {
                 const user = firebase.auth().currentUser
-                await firebase.database().ref(`/users/${uid}/info`).update({
-                    name,
-                    secondName,
-                    phone,
-                    city,
+                await firebase.storage().ref(`/users/${formData.uid}/passport/passportFront`).put(passport.passportFront)
+                const passportFrontUrl = await firebase.storage().ref(`/users/${formData.uid}/passport/passportFront`).getDownloadURL()
+                await firebase.storage().ref(`/users/${formData.uid}/passport/passportTwo`).put(passport.passportTwo)
+                const passportTwoUrl = await firebase.storage().ref(`/users/${formData.uid}/passport/passportTwo`).getDownloadURL()
+                await firebase.database().ref(`/users/${formData.uid}/info`).update({
+                    name: formData.name,
+                    secondName: formData.secondName,
+                    phone: formData.phone,
+                    city: formData.city,
                     email: user.email,
-                    fromSource,
-                    job: 'Обучающийся',
+                    fromSource: '',
                     socialLinks: {
-                        telegram: socialLinks.telegram,
-                        vk: socialLinks.vk
+                        telegram: formData.socialLinks.telegram,
+                        vk: formData.socialLinks.vk
                     },
-                    photo: '',
-                    isAdmin: false
+                    passport: {
+                        passportFront: passportFrontUrl,
+                        passportTwo: passportTwoUrl
+                    },
+                    isAdmin: false,
+                    verify: false
                 })
-                await dispatch('addNotification', {
-                    uid,
-                    notification: {
-                        title: 'Вы успешно зарегистрировались!',
-                        desc: 'Чтобы приступить к работе, вам необходимо пройти обучение',
-                        icon: 'mdi-login'
-                    }
-                })
+                // await dispatch('addNotification', {
+                //     uid,
+                //     notification: {
+                //         title: 'Вы успешно зарегистрировались!',
+                //         desc: 'Чтобы приступить к работе, вам необходимо пройти обучение',
+                //         icon: 'mdi-login'
+                //     }
+                // })
             } catch (e) {throw e}
         },
 

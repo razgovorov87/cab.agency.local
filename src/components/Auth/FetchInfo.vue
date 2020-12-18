@@ -49,47 +49,30 @@
             >
             </v-text-field>
 
-            <span class="overline">Социальные сети</span>
-            <v-text-field
-                v-model="vkontakte"
-                :rules="[socialVerify]"
+            <span class="overline">Паспорт</span>
+            <v-file-input
+                v-model="passportFront"
+                :rules="passportFrontRules"
+                required
                 outlined
                 dense
-                placeholder="Вконтакте"
+                prepend-icon="mdi-book-open-outline"
+                placeholder="Первая страница паспорта"
                 
             >
-            <template v-slot:prepend-inner>
-                <v-icon color="primary">
-                    mdi-vk
-                </v-icon>
-            </template>
-            </v-text-field>
-            <v-text-field
-                v-model="telegram"
-                :rules="[socialVerify]"
-                outlined
-                dense
-                placeholder="Telegram"
-                
-            >
-            <template v-slot:prepend-inner>
-                <v-icon color="primary darken-1">
-                    mdi-telegram
-                </v-icon>
-            </template>
-            </v-text-field>
-            
-            
+            </v-file-input>
 
-            <span class="overline">Откуда узнали о нас?</span>
-            <v-text-field
-                v-model="fromSource"
+            <v-file-input
+                v-model="passportTwo"
+                :rules="passportTwoRules"
+                required
                 outlined
                 dense
-                placeholder="От друзей, реклама и т.д."
+                prepend-icon="mdi-book-open-outline"
+                placeholder="Страница с пропиской"
                 
             >
-            </v-text-field>
+            </v-file-input>
 
             <v-btn color="primary" block class="mb-2" @click="saveUserInfo()" :loading="btnLoading">Отправить<v-icon right>mdi-login</v-icon></v-btn>
         </v-form>
@@ -119,9 +102,14 @@ export default {
         cityRules: [
             v => !!v || 'Обязательное поле',
         ],
-        fromSource: '',
-        vkontakte: '',
-        telegram: '',
+        passportFront: null,
+        passportFrontRules: [
+            v => !!v || 'Обязательное поле',
+        ],
+        passportTwo: null,
+        passportTwoRules: [
+            v => !!v || 'Обязательное поле',
+        ],
         btnLoading: false
     }),
     
@@ -141,13 +129,17 @@ export default {
                         phone: this.phone,
                         city: this.city,
                         socialLinks: {
-                            vk: this.vkontakte,
-                            telegram: this.telegram
+                            vk: '',
+                            telegram: ''
                         },
-                        fromSource: this.fromSource
                     }
 
-                    await this.$store.dispatch('saveUserInfo', formData)
+                    const passport = {
+                        passportFront: this.passportFront,
+                        passportTwo: this.passportTwo
+                    }
+
+                    await this.$store.dispatch('saveUserInfo', {formData, passport})
                     this.$router.push('/')
                 } catch (e) {
                     console.log(e)

@@ -1,5 +1,5 @@
 <template>
-    <div class="profile pa-5">
+    <div class="profile pa-5" v-if="userInfo">
 
         <v-card flat class="d-flex align-center">
             <div>
@@ -18,12 +18,19 @@
         <UserProfileCard v-bind:userInfo="userInfo" />
         <v-tabs class="mt-5" v-model="tab" style="border-bottom: 1px solid #d9e3f1;" dense>
             <v-tab>Проекты</v-tab>
+            <v-tab>Обучение</v-tab>
             <v-tab>Настройки</v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tab" class="pa-3">
             <v-tab-item>
-                <HouseTab />
+                <div v-if="userInfo && !userInfo.verify" class="d-flex justify-center pt-3">
+                    <v-chip class="subtitle-2" color="warning">Вы не можете приступить к работе, дождитесь проверки вашего профиля администратором!</v-chip>
+                </div>
+                <HouseTab v-else/>
+            </v-tab-item>
+            <v-tab-item>
+                <LearningTab />
             </v-tab-item>
             <v-tab-item>
                 <SettingsTab v-bind:userInfo="userInfo" />
@@ -51,13 +58,14 @@ export default {
                 href: 'profile'
             },
         ],
-        date: new Date()
+        date: new Date(),
+        successProject: null
     }),
 
     computed: {
         userInfo() {
             return this.$store.getters.info
-        }
+        },
     },
 
 
