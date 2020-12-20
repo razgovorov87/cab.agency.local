@@ -6,8 +6,8 @@
             <div class="d-flex align-center py-5">
                 <v-badge bottom right overlap bordered color="#244F96" offset-x="25" offset-y="25" icon="mdi-camera">
                     <v-avatar size="110" color="grey lighten-3">
-                        <img v-if="userInfo.photo" :src="userInfo.photo" :alt="userInfo.name + ' ' + userInfo.secondName">
-                        <v-icon v-else x-large>mdi-account</v-icon>
+                        <img src="https://cdn.discordapp.com/attachments/681583977186066492/789403249555669032/KOt-Rmw87Gw.jpg" :alt="userInfo.name + ' ' + userInfo.secondName">
+                        <!-- <v-icon v-else x-large>mdi-account</v-icon> -->
                     </v-avatar>
                 </v-badge>
                 <div class="user-info d-flex flex-column ml-5 mt-3">

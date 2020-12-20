@@ -40,8 +40,8 @@ export default {
             try {
                 await firebase.database().ref(`/houses/${info.id}/info`).update(info)
                 await firebase.database().ref(`/houses/${info.id}/decision`).update(decision)
-                await firebase.database().ref(`/houses/${decision.id}/`).update({
-                    status: 'Выполнено',
+                await firebase.database().ref(`/houses/${info.id}/`).update({
+                    status: decision.decision == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
                 })
             } catch (e) {
                 throw e

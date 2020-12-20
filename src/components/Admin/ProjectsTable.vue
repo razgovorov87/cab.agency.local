@@ -96,7 +96,7 @@ export default {
   data: () => ({
       users: [],
     headers: [
-      { text: "Адресс", value: "title" },
+      { text: "Адрес", value: "adress" },
       { text: "Решение", value: "decision" },
       { text: "Тип", value: "type" },
       { text: "Аренда", value: "rent" },

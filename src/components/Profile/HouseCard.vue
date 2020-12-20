@@ -9,7 +9,7 @@
       <div class="card-header pa-3">
         <div class="d-flex justify-space-between">
           <p class="overline primary--text ma-0">{{ house.info.type }}</p>
-          <div>
+          <!-- <div>
             <v-chip
               small
               color="#4192F2"
@@ -24,14 +24,15 @@
               v-if="house.info.salePrice"
               >Продажа</v-chip
             >
-          </div>
+          </div> -->
         </div>
         <v-card-title class="font-weight-black pa-0">
           <v-icon color="black">mdi-map-marker</v-icon>
-          {{ house.info.adress }}
+          {{house.info.adress}}
+          <v-btn block rounded class="mt-2" color="primary" outlined> <v-icon>mdi-open-in-new</v-icon> </v-btn>
         </v-card-title>
       </div>
-      <v-card-text class="px-3">
+      <!-- <v-card-text class="px-3">
         <div
           style="border-bottom: 1px solid #d9e3f1"
           class="pa-2 d-flex justify-space-around"
@@ -80,7 +81,7 @@
             </v-btn>
           </div>
         </div>
-      </v-card-text>
+      </v-card-text> -->
       <div
         class="house-footer grey lighten-3 pa-5 d-flex justify-space-between align-center"
       >

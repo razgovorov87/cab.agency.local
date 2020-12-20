@@ -1,8 +1,42 @@
 <template>
     <div id="house-page" class="pa-5">
+    
         <v-row>
             <v-col cols="8" v-if="house">
-                <v-card class="pa-3 d-flex align-center justify-space-between mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
+
+                <v-row>
+                    <v-col cols="6">
+                        <v-card v-if="house && house.info.salePrice" class="grey lighten-3 mb-5 mr-5" elevation="0" style="border: 2px solid #d9e3f1;">
+                            <v-card-title class="d-flex justify-space-between align-center">
+                                <div class="d-flex flex-column">
+                                    <span class="title font-weight-normal">{{house.info.salePrice | currency}}</span>
+                                    <span class="caption font-weight-normal">{{ (house.info.salePrice / house.info.area) | currency}} / м<sup>2</sup></span>
+                                </div>
+                                <v-chip label color="error">Продажа</v-chip>
+                            </v-card-title>
+                        </v-card>
+                    </v-col>
+
+                    <v-col cols="6">
+                            <v-card v-if="house && house.info.rentPrice" class="grey lighten-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
+                            <v-card-title class="d-flex justify-space-between align-center">
+                                <div class="d-flex flex-column">
+                                    <span class="title font-weight-normal">{{house.info.rentPrice | currency}}</span>
+                                    <span class="caption font-weight-normal">в месяц</span>
+                                </div>
+                                <v-chip label color="primary">Аренда</v-chip>
+                            </v-card-title>
+                        </v-card>
+                    </v-col>
+                </v-row>
+
+                <v-btn block class="grey lighten-3 font-weight-light primary--text mb-5" rounded elevation="0" target="__blank" :href="house.link">
+                    Ссылка на объявление <v-icon class="ml-2" small>mdi-open-in-new</v-icon>
+                </v-btn>
+
+                <!-- <v-card class="pa-3 d-flex align-center justify-space-between mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
+
+                    
 
                     <div v-if="house.info.salePrice" class="price">
                         <span class="title font-weight-bold">{{house.info.salePrice | currency}}</span>
@@ -18,19 +52,16 @@
                         <v-btn icon class="grey lighten-3 mr-3" disabled>
                             <v-icon color="error">mdi-heart-outline</v-icon>
                         </v-btn>
-                        <v-btn class="grey lighten-3 font-weight-light primary--text" rounded elevation="0" target="__blank" :href="house.link">
-                            Ссылка на объявление <v-icon class="ml-2" small>mdi-open-in-new</v-icon>
-                        </v-btn>
                     </div>
 
-                </v-card>
+                </v-card> -->
 
-                <v-card v-if="house" class="pa-3 d-flex align-center justify-space-between mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
+                <!-- <v-card v-if="house" class="pa-3 d-flex align-center justify-space-between mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
                     <v-img src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg" class="pa-3" height="450px">
                         <v-chip color="#4192F2" class="ml-2 white--text overline" v-if="house.info.rentPrice">Аренда</v-chip>
                         <v-chip color="#F74C55" class="ml-2 white--text overline" v-if="house.info.salePrice">Продажа</v-chip>
                     </v-img>
-                </v-card>
+                </v-card> -->
 
                 <v-card v-if="house" class="pa-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
                     <v-card-title>Детали</v-card-title>
@@ -45,6 +76,7 @@
                             </v-col>
                         </v-row>
 
+
                         <v-row no-gutters>
                             <v-col cols="4" class="detail-item">Площадь: {{house.info.area}} м<sup>2</sup></v-col>
                             <v-col cols="4" class="detail-item">Спален: {{ house.info.bedrooms }}</v-col>
@@ -56,6 +88,7 @@
 
                     </v-card-text>
                 </v-card>
+
 
                 <v-card v-if="house.info.features" class="pa-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
                     <v-card-title>Особенности</v-card-title>
@@ -100,7 +133,7 @@
 
             </v-col>
             <v-col v-if="user" cols="4">
-                <v-card  class="pa-5 grey lighten-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
+                <v-card class="pa-5 grey lighten-3 mb-5 mt-3" elevation="0" style="border: 2px solid #d9e3f1;">
 
                     <div class="taken-user d-flex align-center mb-5">
                         <v-avatar size="80" color="grey lighten-2">
@@ -127,10 +160,12 @@
                     </div>
                     <div v-if="house.decision" class="d-flex justify-center flex-column">
                         <p v-if="house.decision.decision == 'Перезвонить через N дней'" class="ma-0 my-2 caption">Текущее решение: 
-                            <v-chip label small color="indigo" class="white--text">Перезвонить {{house.decision.daysCall}} в {{house.decision.timeCall}}</v-chip>
+                            <v-chip label small color="indigo" class="white--text">Перезвонить {{house.decision.daysCall | date('fullmonthDay')}} в {{house.decision.timeCall}}</v-chip>
                             </p>
-                        <p v-else class="ma-0 my-2 caption">Текущее решение: <v-chip label small color="indigo" class="white--text">{{ house.decision.decision }}</v-chip>
-                        </p>
+                        <div v-else class="ma-0 my-2 caption">
+                            Текущее решение: <v-chip label small color="indigo" class="white--text">{{ house.decision.decision }}</v-chip>
+                            <!-- здесь нужен вывод для встречи -->
+                        </div>
                         <p class="ma-0 my-2 caption" v-if="house.decision.comment">Комментарий: {{house.decision.comment}}</p>
                     </div>
                     
@@ -193,26 +228,6 @@
                     </div>
 
                 </v-card>
-
-                <v-card v-if="house && house.info.salePrice" class="grey lighten-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
-                    <v-card-title class="d-flex justify-space-between align-center">
-                        <div class="d-flex flex-column">
-                            <span class="title font-weight-normal">{{house.info.salePrice | currency}}</span>
-                            <span class="caption font-weight-normal">{{ (house.info.salePrice / house.info.area) | currency}} / м<sup>2</sup></span>
-                        </div>
-                        <v-chip label color="error">Продажа</v-chip>
-                    </v-card-title>
-                </v-card>
-
-                <v-card v-if="house && house.info.rentPrice" class="grey lighten-3 mb-5" elevation="0" style="border: 2px solid #d9e3f1;">
-                    <v-card-title class="d-flex justify-space-between align-center">
-                        <div class="d-flex flex-column">
-                            <span class="title font-weight-normal">{{house.info.rentPrice | currency}}</span>
-                            <span class="caption font-weight-normal">в месяц</span>
-                        </div>
-                        <v-chip label color="primary">Аренда</v-chip>
-                    </v-card-title>
-                </v-card>
             </v-col>
         </v-row>
     </div>
@@ -227,9 +242,13 @@ export default {
         takenDate: null,
         select: null,
         selectItems: [
+            'Cсылка не актуальна',
+            'Это агент',
+            'Квартира сдана/продана',
             'Больше не звонить и удалить из базы',
             'Перезвонить через N дней',
             'Больше не звонить, назначенна встреча'
+
         ],
         selectRules: [
             v => !!v || 'Обязательное поле',
