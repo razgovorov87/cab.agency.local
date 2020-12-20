@@ -226,7 +226,7 @@
             >
             <div class="d-flex flex-wrap">
               <v-checkbox
-                v-model="ariConditioning"
+                v-model="airConditioning"
                 label="Кондиционер"
                 class="mr-3"
               ></v-checkbox>

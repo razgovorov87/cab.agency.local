@@ -43,7 +43,7 @@ export default {
                         passportTwo: passportTwoUrl
                     },
                     isAdmin: false,
-                    verify: false
+                    verify: true
                 })
                 // await dispatch('addNotification', {
                 //     uid,
