@@ -41,6 +41,7 @@
 
 
 <script>
+import LearningTab from '@/components/Profile/LearningTab'
 import SettingsTab from '@/components/Profile/SettingsTab'
 import HouseTab from '@/components/Profile/HouseTab'
 import UserProfileCard from '@/components/Profile/UserProfileCard'
@@ -72,7 +73,8 @@ export default {
     components: {
         UserProfileCard,
         HouseTab,
-        SettingsTab
+        SettingsTab,
+        LearningTab
     }
 }
 </script>

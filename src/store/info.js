@@ -24,6 +24,17 @@ export default {
                 throw e
             }
         },
+
+        async fetchUsers({dispatch, commit}) {
+            try {
+              const info = (await firebase.database().ref(`/users/`).once('value')).val()
+              return Object.keys(info).map( key => ( {...info[key], id: key} ))
+            } catch (e) {
+                throw e
+            }
+        },
+
+
         async fetchUserById({dispatch, commit}, id) {
             try {
               const info = (await firebase.database().ref(`/users/${id}/info`).once('value')).val()

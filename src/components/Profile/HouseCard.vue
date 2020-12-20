@@ -126,7 +126,7 @@
       </v-img>
       <v-card-text class="d-flex justify-space-between">
         <v-chip color="primary"
-          >Перезвонить {{ house.decision.daysCall | date("FullmonthDay") }} в
+          >Перезвонить {{ house.decision.daysCall | date("fullmonthDay") }} в
           {{ house.decision.timeCall }}</v-chip
         >
         

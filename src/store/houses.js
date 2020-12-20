@@ -13,9 +13,15 @@ export default {
 
         async saveDecision({dispatch, commit}, decision) {
             try {
+                const uid = await dispatch('getUid')
                 await firebase.database().ref(`/houses/${decision.id}/decision`).update(decision)
                 await firebase.database().ref(`/houses/${decision.id}/`).update({
                     status: decision.decision == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
+                })
+                await firebase.database().ref(`/houses/${decision.id}/`).update({
+                    status: 'В работе',
+                    takenUser: uid,
+                    takenDate: new Date().toJSON()
                 })
             } catch (e) {
                 throw e
@@ -63,14 +69,8 @@ export default {
 
         async takenNewProject({dispatch, commit}) {
             try {
-                const uid = await dispatch('getUid')
                 const houses = (await firebase.database().ref(`/houses`).once('value')).val()
                 const idx = Object.keys(houses).find( key => !houses[key].takenUser)
-                await firebase.database().ref(`/houses/${idx}/`).update({
-                    status: 'В работе',
-                    takenUser: uid,
-                    takenDate: new Date().toJSON()
-                })
                 return {...houses[idx], id: idx}
             } catch (e) {
                 throw e

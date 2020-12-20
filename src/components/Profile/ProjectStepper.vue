@@ -38,7 +38,6 @@
         </v-card>
         <div class="d-flex justify-end">
           <v-btn class="mr-3" color="primary" @click="stepper = 2">Далее</v-btn>
-          <v-btn color="error" @click="closeDialog">Отмена</v-btn>
         </div>
       </v-stepper-content>
 
@@ -351,7 +350,7 @@ export default {
 
   methods: {
     closeDialog() {
-      $emit('closeDialog')
+      this.$emit('closeDialog')
       this.stepper = 1
     },
 

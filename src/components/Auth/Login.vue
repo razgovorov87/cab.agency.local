@@ -62,6 +62,8 @@ export default {
     methods: {
         async login() {
 
+            // Сделать вход по кнопке Enter и обработчик ошибок
+
             if( this.$refs.loginform.validate() ) {
                 this.btnLoading = true
                 const formData = {

@@ -53,7 +53,7 @@
                 <td>
                     <v-chip label color="primary" v-if="item.decision.decision == 'Перезвонить через N дней'">Перезвонить {{item.decision.daysCall | date('fullmonthDay')}} в {{item.decision.timeCall}}</v-chip>
                 </td>
-                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{item.takenUser}}</router-link></td>
+                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
                 <td colspan="2"></td>
                 <td>
                     <v-btn icon x-small class="mr-1">
@@ -94,6 +94,7 @@ import DialogEdit from '@/components/Admin/DialogEdit'
 import Snackbar from '@/components/Snackbar'
 export default {
   data: () => ({
+      users: [],
     headers: [
       { text: "Адресс", value: "title" },
       { text: "Решение", value: "decision" },
@@ -145,10 +146,15 @@ export default {
             this.editedItem = null
             this.dialogDelete = false
         } catch(e) {console.log(e)}
+      },
+      getTakenUser(id) {
+        const idx = this.users.findIndex(user => user.id == id)
+        return this.users[idx].info.name + ' ' + this.users[idx].info.secondName
       }
   },
 
   async mounted() {
+    this.users = await this.$store.dispatch('fetchUsers')
     this.items = await this.$store.dispatch("fetchHouses")
     this.loading = false
   },

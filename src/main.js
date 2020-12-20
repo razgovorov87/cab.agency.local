@@ -8,6 +8,7 @@ import dateFilter from '@/filters/date.filter'
 import currencyFilter from '@/filters/currency.filter'
 import { VueMaskDirective } from 'v-mask'
 import moment from 'moment';
+import VueYoutube from 'vue-youtube'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -21,6 +22,7 @@ Vue.directive('mask', VueMaskDirective);
 
 Vue.filter('date', dateFilter)
 Vue.filter('currency', currencyFilter)
+Vue.use(VueYoutube)
 
 Vue.config.productionTip = false
 
