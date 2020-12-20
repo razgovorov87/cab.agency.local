@@ -38,7 +38,7 @@ export default {
 
         async saveHouseFullInfo({dispatch, commit}, {info, decision, checkDisable}) {
             try {
-                if(!checkDisable) await firebase.database().ref(`/houses/${info.id}/info`).update(info)
+                await firebase.database().ref(`/houses/${info.id}/info`).update(info)
                 await firebase.database().ref(`/houses/${info.id}/decision`).update(decision)
                 await firebase.database().ref(`/houses/${decision.id}/`).update({
                     status: 'Выполнено',
