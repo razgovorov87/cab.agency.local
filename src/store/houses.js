@@ -125,5 +125,19 @@ export default {
             }
         },
 
+        async archiveHouse({dispatch, commit}, info) {
+            try {
+                const house = (await firebase.database().ref(`/houses/${info.id}`).once('value')).val()
+                await firebase.database().ref(`/houses/${info.id}`).remove()
+                await firebase.database().ref(`/archive/houses/${info.id}`).update(house)
+                await firebase.database().ref(`/archive/houses/${info.id}`).update({
+                    decision: info.decision,
+                    comment: info.comment
+                })
+            } catch (e) {
+                throw e
+            }
+        },
+
     },
 }

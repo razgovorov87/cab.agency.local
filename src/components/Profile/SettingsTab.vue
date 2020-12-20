@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <PersonalSettings v-bind:info="userInfo" />
+        <PersonalSettings v-bind:info="userInfo" @refreshPage="refreshPage"/>
         <v-col col="6">
             <ChangePassword />  
             <OtherSettings />   
@@ -14,6 +14,12 @@ import ChangePassword from '@/components/Profile/ChangePassword'
 import PersonalSettings from '@/components/Profile/PersonalSettings'
 export default {
     props: ['userInfo'],
+
+    methods: {
+        refreshPage() {
+            this.$emit('refreshPage')
+        }
+    },
 
     components: {
         PersonalSettings,

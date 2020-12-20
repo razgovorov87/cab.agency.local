@@ -334,9 +334,12 @@ export default {
     hob: false,
     select: "Перезвонить через N дней",
     selectItems: [
-      "Больше не звонить и удалить из базы",
-      "Перезвонить через N дней",
-      "Больше не звонить, назначенна встреча",
+     'Cсылка не актуальна',
+      'Это агент',
+      'Квартира сдана/продана',
+      'Больше не звонить и удалить из базы',
+      'Перезвонить через N дней',
+      'Больше не звонить, назначенна встреча'
     ],
     selectRules: [(v) => !!v || "Обязательное поле"],
     dateMeeting: '',
@@ -394,31 +397,55 @@ export default {
 
     async saveDecision() {
       if (this.$refs.decisionform.validate()) {
-        this.loadingBtn = true;
-        
-        const decision = {
-          id: this.house.id,
-          decision: this.select,
-          daysCall: this.daysCall,
-          timeCall: this.timeCall,
-          dateMeeting: this.dateMeeting,
-          whoMeeting: this.whoMeeting,
-          placeMeeting: this.placeMeeting,
-          comment: this.comment,
-        };
 
-        try {
-          await this.$store.dispatch("saveDecision", decision);
-          if( decision.decision == 'Больше не звонить, назначенна встреча' ) {
-            this.stepper = 3;
-            this.loadingBtn = false;
-          } else {
-            this.loadingBtn = false;
-            this.$emit("success");
+
+
+        if(this.select != 'Больше не звонить, назначенна встреча' || this.select != 'Перезвонить через N дней') {
+
+          const info = {
+            id: this.house.id,
+            decision: this.select,
+            comment: this.comment
           }
-        } catch (e) {
-          console.log(e);
+          try {
+            await this.$store.dispatch('archiveHouse', info)
+          } catch (e) {
+            console.log(e)
+          }
+
+        } else {
+
+          this.loadingBtn = true;
+        
+          const decision = {
+            id: this.house.id,
+            decision: this.select,
+            daysCall: this.daysCall,
+            timeCall: this.timeCall,
+            dateMeeting: this.dateMeeting,
+            whoMeeting: this.whoMeeting,
+            placeMeeting: this.placeMeeting,
+            comment: this.comment,
+          };
+
+          try {
+            await this.$store.dispatch("saveDecision", decision);
+            if( decision.decision == 'Больше не звонить, назначенна встреча' ) {
+              this.stepper = 3;
+              this.loadingBtn = false;
+            } else {
+              this.loadingBtn = false;
+              this.$emit("success");
+            }
+          } catch (e) {
+            console.log(e);
+          }
+
         }
+
+
+
+
       }
     },
   },

@@ -20,13 +20,9 @@ export default {
             } catch (e) {throw e}
         },
 
-        async saveUserInfo({dispatch, commit}, {formData, passport}) {
+        async saveUserInfo({dispatch, commit}, formData) {
             try {
                 const user = firebase.auth().currentUser
-                await firebase.storage().ref(`/users/${formData.uid}/passport/passportFront`).put(passport.passportFront)
-                const passportFrontUrl = await firebase.storage().ref(`/users/${formData.uid}/passport/passportFront`).getDownloadURL()
-                await firebase.storage().ref(`/users/${formData.uid}/passport/passportTwo`).put(passport.passportTwo)
-                const passportTwoUrl = await firebase.storage().ref(`/users/${formData.uid}/passport/passportTwo`).getDownloadURL()
                 await firebase.database().ref(`/users/${formData.uid}/info`).update({
                     name: formData.name,
                     secondName: formData.secondName,
@@ -38,12 +34,8 @@ export default {
                         telegram: formData.socialLinks.telegram,
                         vk: formData.socialLinks.vk
                     },
-                    passport: {
-                        passportFront: passportFrontUrl,
-                        passportTwo: passportTwoUrl
-                    },
                     isAdmin: false,
-                    verify: true
+                    verify: false
                 })
                 // await dispatch('addNotification', {
                 //     uid,

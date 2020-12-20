@@ -43,6 +43,31 @@ export default {
                 throw e
             }
         },
+
+        async savePersonalUserInfo({dispatch, commit}, {formData, passport}) {
+            try {
+              const uid = await dispatch('getUid') 
+              await firebase.database().ref(`/users/${uid}/info`).update(formData)
+
+              if(passport.passportFront && passport.passportTwo) {
+                await firebase.storage().ref(`/users/${uid}/passportFront`).put(passport.passportFront)
+                const passportFront = await firebase.storage().ref(`/users/${uid}/passportFront`).getDownloadURL()
+                await firebase.storage().ref(`/users/${uid}/passportTwo`).put(passport.passportTwo)
+                const passportTwo = await firebase.storage().ref(`/users/${uid}/passportTwo`).getDownloadURL()
+                await firebase.database().ref(`/users/${uid}/info/passport`).update({
+                    passportFront,
+                    passportTwo
+                })
+                
+                await firebase.database().ref(`/users/${uid}/info`).update({
+                    verify: true
+                })
+              }
+
+            } catch (e) {
+                throw e
+            }
+        },
     },
 
     getters: {

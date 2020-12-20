@@ -4,13 +4,12 @@
       v-if="house.info"
       elevation="0"
       style="border: 1px solid #d9e3f1"
-      @click="$router.push('/houses/' + house.id)"
     >
       <div class="card-header pa-3">
-        <div class="d-flex justify-space-between">
+        <div class="d-flex justify-space-between align-center mb-2">
           <p class="overline primary--text ma-0">{{ house.info.type }}</p>
-          <!-- <div>
-            <v-chip
+          <div>
+            <!-- <v-chip
               small
               color="#4192F2"
               class="ml-2 white--text overline text-center"
@@ -23,14 +22,17 @@
               class="ml-2 white--text overline text-center"
               v-if="house.info.salePrice"
               >Продажа</v-chip
-            >
-          </div> -->
+            > -->
+            <v-btn rounded color="primary" :href="house.link" target="__blank" small> <v-icon>mdi-open-in-new</v-icon> </v-btn>
+          </div>
         </div>
-        <v-card-title class="font-weight-black pa-0">
-          <v-icon color="black">mdi-map-marker</v-icon>
-          {{house.info.adress}}
-          <v-btn block rounded class="mt-2" color="primary" outlined :href="house.link" target="__blank"> <v-icon>mdi-open-in-new</v-icon> </v-btn>
+        <v-card-title class="caption pa-0">
+          <div>
+            <v-icon small>mdi-map-marker</v-icon>
+            {{house.info.adress}}
+          </div>
         </v-card-title>
+        <v-btn block rounded class="mt-2 mr-2" color="primary" outlined @click="$router.push('/houses/' + house.id)">Открыть карточку</v-btn>
       </div>
       <!-- <v-card-text class="px-3">
         <div

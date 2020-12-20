@@ -49,30 +49,7 @@
             >
             </v-text-field>
 
-            <span class="overline">Паспорт</span>
-            <v-file-input
-                v-model="passportFront"
-                :rules="passportFrontRules"
-                required
-                outlined
-                dense
-                prepend-icon="mdi-book-open-outline"
-                placeholder="Первая страница паспорта"
-                
-            >
-            </v-file-input>
-
-            <v-file-input
-                v-model="passportTwo"
-                :rules="passportTwoRules"
-                required
-                outlined
-                dense
-                prepend-icon="mdi-book-open-outline"
-                placeholder="Страница с пропиской"
-                
-            >
-            </v-file-input>
+            
 
             <v-btn color="primary" block class="mb-2" @click="saveUserInfo()" :loading="btnLoading">Отправить<v-icon right>mdi-login</v-icon></v-btn>
         </v-form>
@@ -102,14 +79,6 @@ export default {
         cityRules: [
             v => !!v || 'Обязательное поле',
         ],
-        passportFront: null,
-        passportFrontRules: [
-            v => !!v || 'Обязательное поле',
-        ],
-        passportTwo: null,
-        passportTwoRules: [
-            v => !!v || 'Обязательное поле',
-        ],
         btnLoading: false
     }),
     
@@ -134,12 +103,7 @@ export default {
                         },
                     }
 
-                    const passport = {
-                        passportFront: this.passportFront,
-                        passportTwo: this.passportTwo
-                    }
-
-                    await this.$store.dispatch('saveUserInfo', {formData, passport})
+                    await this.$store.dispatch('saveUserInfo', formData)
                     this.$router.push('/')
                 } catch (e) {
                     console.log(e)
