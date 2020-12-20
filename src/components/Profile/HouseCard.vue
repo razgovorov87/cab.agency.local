@@ -29,7 +29,7 @@
         <v-card-title class="font-weight-black pa-0">
           <v-icon color="black">mdi-map-marker</v-icon>
           {{house.info.adress}}
-          <v-btn block rounded class="mt-2" color="primary" outlined> <v-icon>mdi-open-in-new</v-icon> </v-btn>
+          <v-btn block rounded class="mt-2" color="primary" outlined :href="house.link" target="__blank"> <v-icon>mdi-open-in-new</v-icon> </v-btn>
         </v-card-title>
       </div>
       <!-- <v-card-text class="px-3">
