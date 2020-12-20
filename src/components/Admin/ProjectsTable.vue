@@ -123,6 +123,7 @@ export default {
       async refresh() {
           this.loading = true
           this.items = await this.$store.dispatch("fetchHouses")
+          this.refreshTable++
           this.loading = false
       },
       editItem(item, id) {
