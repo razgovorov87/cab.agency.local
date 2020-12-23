@@ -40,7 +40,7 @@
             </v-text-field>
 
             <div :class="!recaptcha ? 'recaptcha_error' : '' ">
-                <vue-recaptcha ref="recaptcha" sitekey="6Ld5bREaAAAAAKD0uZuUoCpHquhI3th8j0_H1wgn" @verify="recaptchaVerify"></vue-recaptcha>
+                <vue-recaptcha ref="recaptcha" sitekey="6LetaxEaAAAAADU-8cBZwT59AWY9syM0kUeKl92U" @verify="recaptchaVerify"></vue-recaptcha>
                 <span class="recaptcha_msg error--text caption">Не пройдена проверка на робота</span>
             </div>
 
