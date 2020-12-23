@@ -1,17 +1,41 @@
 <template>
   <div id="main">
-    <v-app-bar app flat color="#fff" height="52px" :style="!drawer ? 'left: 219px;' : 'left: 56px;'">
-      <v-app-bar-nav-icon>
-        <v-icon @click="drawer = !drawer">mdi-menu</v-icon>
-      </v-app-bar-nav-icon>
+    <v-app-bar app flat color="#fff" height="57px">
+
+      <v-btn class="title text-capitalize" text @click="$router.push('/')">
+        <v-icon class="mr-2">mdi-home-outline</v-icon>
+        Медиан
+      </v-btn>
+      
+      <v-divider vertical></v-divider>
+
+      <div v-if="isAdmin" class="d-flex">
+          <v-list-item link to="/admin/projects">
+            <v-list-item-icon>
+              <v-icon color="#a9baca">mdi-briefcase-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Проекты</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item link to="/admin/users">
+            <v-list-item-icon>
+              <v-icon color="#a9baca">mdi-account-group-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>Пользователи</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      </v-btn> -->
 
-      <v-badge v-if="notificationLength" v-model="bagdeNotification" bordered color="error" :content="notificationLength" overlap offset-x="20" offset-y="23">
+      <!-- <v-badge v-if="notificationLength" v-model="bagdeNotification" bordered color="error" :content="notificationLength" overlap offset-x="20" offset-y="23">
         <v-menu v-model="notificationPopover" offset-y left>
 
           <template v-slot:activator="{ on }">
@@ -55,85 +79,30 @@
             </v-btn>
           </template>
 
-        <v-card elevation="0" style="border: 1px solid #d9e3f1;" width="500px">
-          <v-card-title style="border-bottom: 1px solid #d9e3f1;" class="py-2 px-3 d-flex justify-space-between">
-            <span class="subtitle-1">Уведомления</span>
-            <v-chip color="primary" small>0</v-chip>
-          </v-card-title>
-          <v-card-text class="d-flex justify-center align-center mt-5">
-            <span class="body-2 grey--text">У вас нет новых уведомлений!</span>
-          </v-card-text>
-        </v-card>
-        </v-menu>
+          <v-card elevation="0" style="border: 1px solid #d9e3f1;" width="500px">
+            <v-card-title style="border-bottom: 1px solid #d9e3f1;" class="py-2 px-3 d-flex justify-space-between">
+              <span class="subtitle-1">Уведомления</span>
+              <v-chip color="primary" small>0</v-chip>
+            </v-card-title>
+            <v-card-text class="d-flex justify-center align-center mt-5">
+              <span class="body-2 grey--text">У вас нет новых уведомлений!</span>
+            </v-card-text>
+          </v-card>
+        </v-menu> -->
+        
+        <v-divider vertical></v-divider>
+
+        <div class="d-flex justify-space-between align-center">
+
+          <v-btn icon @click="logout()" class="mx-2">
+            <v-icon>mdi-logout</v-icon>
+          </v-btn>
+        </div>
 
 
     </v-app-bar>
-    <v-navigation-drawer
-      :mini-variant="drawer"
-      width="219px"
-      color="#244F96"
-      dark
-      app
-      class="pb-3"
-    >
-      <span class="title d-flex align-center justify-center white--text my-3"><v-icon class="mr-2">mdi-home</v-icon> Медиан</span>
-      <v-list dense nav class="drawer-nav">
 
-        <v-list-item link to="/">
-          <v-list-item-icon>
-            <v-icon color="#a9baca">mdi-account-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Мой профиль</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-icon small color="#a9baca">mdi-chevron-right</v-icon>
-          </v-list-item-action>
-        </v-list-item>
-
-        <div v-if="isAdmin">
-          <v-subheader>Панель администратора</v-subheader>
-          <v-list-item link to="/admin/projects">
-            <v-list-item-icon>
-              <v-icon color="#a9baca">mdi-briefcase-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Проекты</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-icon small color="#a9baca">mdi-chevron-right</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-
-          <v-list-item link to="/admin/users" disabled>
-            <v-list-item-icon>
-              <v-icon color="#a9baca">mdi-account-group-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>Пользователи</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-icon small color="#a9baca">mdi-chevron-right</v-icon>
-            </v-list-item-action>
-          </v-list-item>
-        </div>
-
-      </v-list>
-
-      <template v-slot:append>
-        <div class="d-flex justify-space-between align-center" :class="!drawer ? 'px-5' : 'px-1'">
-          <v-avatar class="grey lighten-1">
-            <v-icon>mdi-account</v-icon>
-          </v-avatar>
-
-          <v-btn icon @click="logout()">
-            <v-icon color="white">mdi-logout</v-icon>
-          </v-btn>
-        </div>
-      </template>
-    </v-navigation-drawer>
-
-    <v-main  :style="!drawer ? 'padding-left: 219px;' : 'padding-left: 56px;'">
+    <v-main>
       <router-view></router-view>
     </v-main>
   </div>
@@ -186,3 +155,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-toolbar__content {
+  padding-right: 0;
+}
+</style>

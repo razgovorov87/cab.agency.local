@@ -39,7 +39,12 @@
             >
             </v-text-field>
 
-            <v-btn color="primary" block class="mb-2" @click="registerUser()" :loading="btnLoading">Регистрация<v-icon right>mdi-login</v-icon></v-btn>
+            <div :class="!recaptcha ? 'recaptcha_error' : '' ">
+                <vue-recaptcha ref="recaptcha" sitekey="6Ld5bREaAAAAAKD0uZuUoCpHquhI3th8j0_H1wgn" @verify="recaptchaVerify"></vue-recaptcha>
+                <span class="recaptcha_msg error--text caption">Не пройдена проверка на робота</span>
+            </div>
+
+            <v-btn color="primary" block class="mb-2 mt-3" @click="registerUser()" :loading="btnLoading">Регистрация<v-icon right>mdi-login</v-icon></v-btn>
         </v-form>
         <div class="auth-footer" style="border-top: 1px solid #d9e3f1;">
             <p class="caption d-flex py-5 justify-center align-center ma-0">Медиан © 2020</p>
@@ -48,6 +53,7 @@
 </template>
 
 <script>
+import VueRecaptcha from 'vue-recaptcha';
 export default {
     data: () => ({
         registerForm: true,
@@ -73,12 +79,16 @@ export default {
         showPassword: false,
         showRePassword: false,
         acceptSwitch: false,
-        btnLoading: false
+        btnLoading: false,
+        recaptcha: null
     }),
 
     methods: {
+        recaptchaVerify(response) {
+            this.recaptcha = response
+        },
         async registerUser() {
-            if( this.$refs.registerform.validate() ) {
+            if( this.$refs.registerform.validate() && this.recaptcha) {
                 this.btnLoading = true
                 const formData = {
                     name: this.name,
@@ -101,6 +111,19 @@ export default {
         passwordConfirmationRule() {
             return () => (this.password === this.confirmPassword) || 'Пароли не совпадают'
         }
+    },
+
+    components: {
+        VueRecaptcha
     }
 }
 </script>
+
+<style>
+.recaptcha_msg {
+    display: none;
+}
+.recaptcha_error .recaptcha_msg {
+    display: block;
+}
+</style>

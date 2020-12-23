@@ -2,7 +2,7 @@
     <v-card elevation="0" style="border: 1px solid #d9e3f1;">
                 <v-card-title style="border-bottom: 1px solid #d9e3f1;" class="subtitle-1">Смена пароля</v-card-title>
                 <v-card-text>
-                    <v-form id="change_password-form">
+                    <v-form id="change_password-form" disabled>
                         
                         <v-row>
                             <v-col cols="4" align-self="center">
@@ -66,7 +66,7 @@
 
                         <v-row>
                             <v-col cols="7" offset="4">
-                                <v-btn color="primary" small>Изменить пароль</v-btn>
+                                <v-btn color="primary" small disabled>Изменить пароль</v-btn>
                             </v-col>
                         </v-row>
 

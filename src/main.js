@@ -14,8 +14,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import 'firebase/storage'
-
-
 Vue.prototype.$moment = moment;
 
 Vue.directive('mask', VueMaskDirective);

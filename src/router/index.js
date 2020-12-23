@@ -41,6 +41,12 @@ const routes = [
     meta: {layout: 'main', auth: true, info: true},
     component: () => import('../views/Admin/Projects.vue')
   },
+  {
+    path: '/admin/users',
+    name: 'Users',
+    meta: {layout: 'main', auth: true, info: true},
+    component: () => import('../views/Admin/Users.vue')
+  },
 ]
 
 const router = new VueRouter({
