@@ -409,6 +409,7 @@ export default {
           }
           try {
             await this.$store.dispatch('archiveHouse', info)
+            this.$emit("success");
           } catch (e) {
             console.log(e)
           }

@@ -49,10 +49,14 @@
         <div class="auth-footer" style="border-top: 1px solid #d9e3f1;">
             <p class="caption d-flex py-5 justify-center align-center ma-0">Медиан © 2020</p>
         </div>
+        
+        <Snackbar v-bind:options="snackbar" :key="snackbar" />
     </div>
 </template>
 
 <script>
+import errors from '@/errors'
+import Snackbar from '@/components/Snackbar'
 import VueRecaptcha from 'vue-recaptcha';
 export default {
     data: () => ({
@@ -80,7 +84,8 @@ export default {
         showRePassword: false,
         acceptSwitch: false,
         btnLoading: false,
-        recaptcha: null
+        recaptcha: null,
+        snackbar: null
     }),
 
     methods: {
@@ -101,7 +106,16 @@ export default {
                 try {
                     await this.$store.dispatch('register', formData)
                     this.$router.push('/getinfo')
-                } catch (e) {throw e}
+                } catch (e) {
+                    console.log(e)
+                    const msg = errors[e.code]
+                    this.snackbar = {
+                        status: true,
+                        text: msg,
+                        color: 'error'
+                    }
+                    this.btnLoading = false
+                }
             }
 
         }
@@ -114,7 +128,8 @@ export default {
     },
 
     components: {
-        VueRecaptcha
+        VueRecaptcha,
+        Snackbar
     }
 }
 </script>

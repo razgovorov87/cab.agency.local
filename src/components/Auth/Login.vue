@@ -33,15 +33,18 @@
                     </v-btn>
                 </div>
             </div>
-            <v-btn color="primary" block class="mb-2" @click="login()":loading="btnLoading">Авторизация<v-icon right>mdi-login</v-icon></v-btn>
+            <v-btn color="primary" block class="mb-2" @click="login()" :loading="btnLoading" @keydown.enter="login()">Авторизация<v-icon right>mdi-login</v-icon></v-btn>
         </v-form>
         <div class="auth-footer" style="border-top: 1px solid #d9e3f1;">
             <p class="caption d-flex py-5 justify-center align-center ma-0">Медиан © 2020</p>
         </div>
+        <Snackbar v-bind:options="snackbar" :key="snackbar" />
     </div>
 </template>
 
 <script>
+import Snackbar from '@/components/Snackbar'
+import errors from '@/errors'
 export default {
     data: () => ({
         showPassword: false,
@@ -56,13 +59,12 @@ export default {
             v => !!v || 'Обязательное поле',
             v => (v && v.length >= 8) || 'Пароль должен содержать более 8 символов',
         ],
-        btnLoading: false
+        btnLoading: false,
+        snackbar: null,
     }),
 
     methods: {
         async login() {
-
-            // Сделать вход по кнопке Enter и обработчик ошибок
 
             if( this.$refs.loginform.validate() ) {
                 this.btnLoading = true
@@ -76,11 +78,21 @@ export default {
                     await this.$store.dispatch('login', formData)
                     this.$router.push('/')
                 } catch (e) {
-                    console.log(e)
+                    const msg = errors[e.code]
+                    this.snackbar = {
+                        status: true,
+                        text: msg,
+                        color: 'error'
+                    }
+                    this.btnLoading = false
                 }
             }
 
         }
+    },
+
+    components: {
+        Snackbar
     }
 }
 </script>

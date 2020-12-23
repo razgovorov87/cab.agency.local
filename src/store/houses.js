@@ -129,7 +129,7 @@ export default {
             try {
                 const house = (await firebase.database().ref(`/houses/${info.id}`).once('value')).val()
                 await firebase.database().ref(`/houses/${info.id}`).remove()
-                await firebase.database().ref(`/archive/houses/${info.id}`).update(house)
+                await firebase.database().ref(`/archive/houses/${info.id}`).set(house)
                 await firebase.database().ref(`/archive/houses/${info.id}`).update({
                     decision: info.decision,
                     comment: info.comment

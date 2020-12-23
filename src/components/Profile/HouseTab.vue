@@ -81,7 +81,6 @@ export default {
             this.stepperDialog = true
         },
         async refresh() {
-            console.log('refresh')
             this.loading = true
             this.houses = (await this.$store.dispatch('fetchUserHouses')).reverse()
             this.refreshHouseTab++
