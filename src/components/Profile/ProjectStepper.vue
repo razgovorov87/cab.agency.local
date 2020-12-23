@@ -400,7 +400,8 @@ export default {
 
 
 
-        if(this.select != 'Больше не звонить, назначенна встреча' || this.select != 'Перезвонить через N дней') {
+        if(this.select != 'Больше не звонить, назначенна встреча' && this.select != 'Перезвонить через N дней') {
+
 
           const info = {
             id: this.house.id,
