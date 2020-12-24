@@ -1,11 +1,14 @@
 <template>
   <div>
       <v-skeleton-loader v-if="loading" type="table"></v-skeleton-loader>
-      <v-data-table v-model="houses" :headers="headers" :items="items" :key="refreshTable" group-by="status" locale="ru-RU" hide-default-footer disable-pagination>
+      <v-data-table v-model="houses" :items="items" :key="refreshTable" group-by="status" locale="ru-RU" hide-default-footer disable-pagination>
 
         <template v-slot:group.header="{ group, toggle, isOpen, items }">
             <td colspan="8">
-                <v-btn @click="toggle" icon>
+                <v-btn v-if="group == 'Свободно'" @click="toggle" icon ref="expandTable">
+                    <v-icon>{{ isOpen ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
+                </v-btn>
+                <v-btn v-else @click="toggle" icon>
                     <v-icon>{{ isOpen ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
                 </v-btn>
                 <span v-if="group == 'В работе'">
@@ -22,11 +25,12 @@
 
         <template v-slot:item="{ item }">
             <tr v-if="item.status == 'Выполнено'">
-                <td>
+                <td colspan="2">
                     <router-link :to="'/houses/' + item.id" target="__blank">{{item.info.adress}}</router-link>
                 </td>
-                <td><v-icon color="success">mdi-check</v-icon></td>
-                <td class="caption">{{item.info.type}}</td>
+                <td>
+                    <v-chip label color="primary">Назначена встреча {{item.decision.dateMeeting | date('fullmonthDay')}} с {{item.decision.whoMeeting}}</v-chip>
+                </td>
                 <td v-if="item.info.rentPrice">{{item.info.rentPrice | currency}}</td>
                 <td v-else>
                     <v-icon color="error">mdi-close</v-icon>
@@ -150,7 +154,9 @@ export default {
       },
       getTakenUser(id) {
         const idx = this.users.findIndex(user => user.id == id)
-        return this.users[idx].info.name + ' ' + this.users[idx].info.secondName
+        if(idx != -1) {
+            return this.users[idx].info.name + ' ' + this.users[idx].info.secondName
+        }
       }
   },
 

@@ -120,6 +120,23 @@ export default {
             }
         },
 
+
+        async fetchUserHousesById({dispatch, commit}, uid) {
+            try {
+                let arr = (await firebase.database().ref(`/houses`).once('value')).val()
+                arr = Object.keys(arr).map( key => ( {...arr[key], id: key} ))
+                const result = []
+                arr.forEach( house => {
+                    if(house.takenUser == uid) {
+                        result.push(house)
+                    }
+                } )
+                return result
+            } catch (e) {
+                throw e
+            }
+        },
+
         async fetchHouseResult({dispatch, commit}) {
             try {
                 const uid = await dispatch('getUid')

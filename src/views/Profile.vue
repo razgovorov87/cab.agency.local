@@ -21,6 +21,7 @@
             <v-tabs class="mt-5" v-model="tab" style="border-bottom: 1px solid #d9e3f1;" dense>
                 <v-tab>Проекты</v-tab>
                 <v-tab>Обучение</v-tab>
+                <v-tab>Скрипты</v-tab>
                 <v-tab>Настройки</v-tab>
             </v-tabs>
 
@@ -33,6 +34,13 @@
                 </v-tab-item>
                 <v-tab-item>
                     <LearningTab />
+                </v-tab-item>
+                <v-tab-item>
+                    <div class="mb-5 d-flex align-center justify-center flex-column" style="width: 100%;">
+                        <v-btn color="primary" class="my-4" href="https://firebasestorage.googleapis.com/v0/b/median-5546c.appspot.com/o/skript_obschenia_s_sobstvennikom.pdf?alt=media&token=5a549df2-104b-4e60-9597-9c42db2a8540" target="__blank"><v-icon class="mr-2">mdi-download</v-icon>Общение с собственником</v-btn>
+                        <v-btn color="primary" class="mb-4" href="https://firebasestorage.googleapis.com/v0/b/median-5546c.appspot.com/o/printsipy_partnerstva.pdf?alt=media&token=1fc1bc73-4bcf-4b68-ac2f-f8ea5c099a3c" target="__blank"><v-icon class="mr-2">mdi-download</v-icon>Принципы партнерства</v-btn>
+                        <v-btn color="primary" href="https://firebasestorage.googleapis.com/v0/b/median-5546c.appspot.com/o/Vizitka.pdf?alt=media&token=449119b8-b3a7-452b-b335-54482bd5ec1d" target="__blank"><v-icon class="mr-2">mdi-download</v-icon>Визитка</v-btn>
+                    </div>
                 </v-tab-item>
                 <v-tab-item>
                     <SettingsTab v-bind:userInfo="userInfo" @refreshPage="refreshPage"/>

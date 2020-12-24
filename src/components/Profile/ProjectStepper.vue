@@ -25,7 +25,6 @@
           elevation="0"
         >
           <div class="get-link d-flex flex-column align-center">
-            <p class="ma-0 body-2">Вы успешно взяли новый проект в работу!</p>
             <p class="ma-0 subtitle-2 text-center" style="max-width: 600px">
               Далее, вам необходимо перейти по ссылке ниже, связаться с
               продавцом и заполнить всю информацию о проекте, а так же вынести
@@ -301,7 +300,7 @@
 
 <script>
 export default {
-  props: ["house"],
+  props: ["house", 'step'],
   data: () => ({
     stepper: 1,
     type: null,
@@ -350,6 +349,10 @@ export default {
     comment: '',
     loadingBtn: false,
   }),
+
+  mounted() {
+    this.stepper = this.step
+  },
 
   methods: {
     closeDialog() {

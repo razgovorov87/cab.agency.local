@@ -19,10 +19,6 @@
             </v-col>
         </v-row>
 
-        <div class="d-flex align-center justify-center mb-3">
-            <v-btn x-large color="primary" @click="takenNewProject()">Взять новый проект</v-btn>
-        </div>
-
         <div :key="refreshHouseTab">
             <v-row v-if="loading">
                 <v-col cols="3">
@@ -40,7 +36,7 @@
             </v-row>
 
             <div v-else-if="houses && !Object.keys(houses).length" class="d-flex justify-center align-center mt-5">
-                <p class="subtitle-1">У вас нет взятых проектов</p>
+                <p class="subtitle-1">У пользователя нет взятых проектов</p>
             </div>
 
             <v-row v-else>
@@ -51,7 +47,7 @@
 
         <v-dialog v-model="stepperDialog" persistent>
             <v-card>
-                <ProjectStepper v-bind:house="stepperHouse" v-bind:step="stepperStep" @success="refresh" @closeDialog="stepperDialog = false" :key="stepperHouse"/>
+                <ProjectStepper v-bind:house="stepperHouse" @success="refresh" @closeDialog="stepperDialog = false" :key="stepperHouse"/>
             </v-card>
         </v-dialog>
     </div>
@@ -61,17 +57,18 @@
 import ProjectStepper from '@/components/Profile/ProjectStepper'
 import HouseCard from '@/components/Profile/HouseCard'
 export default {
+    props: ['uid'],
     data: () => ({
         houses: null,
         stepperHouse: {},
         loading: true,
         refreshHouseTab: null,
-        stepperDialog: false,
-        stepperStep: 1
+        stepperDialog: false
     }),
 
     async mounted() {
-        this.houses = (await this.$store.dispatch('fetchUserHouses')).reverse()
+        this.houses = (await this.$store.dispatch('fetchUserHousesById', this.uid)).reverse()
+        console.log(this.houses)
 
         this.loading = false
     },
@@ -79,19 +76,17 @@ export default {
     methods: {
         async takenNewProject() {
             this.stepperHouse = await this.$store.dispatch('takenNewProject')
-            this.stepperStep = 1
             this.stepperDialog = true
         },
         async refresh() {
             this.loading = true
-            this.houses = (await this.$store.dispatch('fetchUserHouses')).reverse()
+            this.houses = (await this.$store.dispatch('fetchUserHousesById', this.uid)).reverse()
             this.refreshHouseTab++
             this.stepperDialog = false
             this.loading = false
         },
         editHouse(house) {
             this.stepperHouse = house
-            this.stepperStep = 2
             this.stepperDialog = true
         }
     },

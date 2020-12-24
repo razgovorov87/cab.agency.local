@@ -7,7 +7,7 @@
     >
       <div class="card-header pa-3">
         <div class="d-flex justify-space-between align-center mb-2">
-          <p class="overline primary--text ma-0">{{ house.info.type }}</p>
+          <p class="subtitle-1 primary--text ma-0">{{ house.info.type }}</p>
           <div>
             <!-- <v-chip
               small
@@ -23,7 +23,7 @@
               v-if="house.info.salePrice"
               >Продажа</v-chip
             > -->
-            <v-btn rounded color="primary" :href="house.link" target="__blank" small> <v-icon>mdi-open-in-new</v-icon> </v-btn>
+            <v-btn rounded color="primary" :href="house.link" target="__blank"> <v-icon>mdi-open-in-new</v-icon> </v-btn>
           </div>
         </div>
         <v-card-title class="caption pa-0">
@@ -32,7 +32,7 @@
             {{house.info.adress}}
           </div>
         </v-card-title>
-        <v-btn block rounded class="mt-2 mr-2" color="primary" outlined @click="$router.push('/houses/' + house.id)">Открыть карточку</v-btn>
+        <v-btn block rounded class="mt-2 mr-2" color="primary" outlined @click="$router.push('/houses/' + house.id)">Открыть</v-btn>
       </div>
       <!-- <v-card-text class="px-3">
         <div
@@ -107,28 +107,25 @@
         </div>
         <div class="status-calendar">
           <v-icon small color="grey">mdi-calendar</v-icon>
-          <span class="body-2 ml-1 grey-darken-1=-text">{{ getDaysAgo }}</span>
+          <span class="body-2 ml-1 grey-darken-1-text">{{ getDaysAgo }}</span>
         </div>
       </div>
     </v-card>
     <v-card v-else elevation="0" style="border: 1px solid #d9e3f1">
-      <div class="card-header pa-3">
-        <a
-          class="caption primary--text ma-0"
-          :href="house.link"
-          target="__blank"
-          >{{ house.link.slice(0, 40) + "..." }}</a
-        >
-      </div>
-      <v-card-text class="d-flex justify-space-between">
-        <v-chip color="primary"
-          >Перезвонить {{ house.decision.daysCall | date("fullmonthDay") }} в
-          {{ house.decision.timeCall }}</v-chip
-        >
-        
-        <v-btn @click="editHouse(house)" rounded color="warning">
-          <v-icon>mdi-pencil</v-icon>
+      <div class="card-header pa-3 pb-2" style="display: table; width: 100%; box-sizing: border-box;">
+        <div style="display: table-cell; padding-right: 40px;" class="pl-1">
+          <v-btn @click="editHouse(house)" rounded color="secondary" outlined block>
+            <v-icon class="mr-2">mdi-pencil</v-icon>
+            Изменить
+          </v-btn>
+        </div>
+        <v-btn rounded :href="house.link" color="primary" style="width: 64px; display: table-cell;" class="mr-2">
+          <v-icon color="white">mdi-open-in-new</v-icon>
         </v-btn>
+      </div>
+      <v-card-text class="d-flex justify-space-between mt-3 pb-3">
+        <v-btn block color="primary" rounded outlined>Перезвонить {{ house.decision.daysCall | date("fullmonthDay") }} в
+          {{ house.decision.timeCall }}</v-btn>
       </v-card-text>
       <div
         class="house-footer grey lighten-3 pa-5 d-flex justify-space-between align-center"
@@ -153,7 +150,7 @@
         </div>
         <div class="status-calendar">
           <v-icon small color="grey">mdi-calendar</v-icon>
-          <span class="body-2 ml-1 grey-darken-1=-text">{{ getDaysAgo }}</span>
+          <span class="body-2 ml-1 grey-darken-1-text">{{ getDaysAgo }}</span>
         </div>
       </div>
     </v-card>

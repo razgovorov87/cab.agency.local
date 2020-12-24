@@ -23,7 +23,7 @@
 
         <v-tabs-items v-model="tab" class="pa-3">
             <v-tab-item>
-                <HouseTab />
+                <HouseTabUserPage v-bind:uid="uid" />
             </v-tab-item>
             <v-tab-item> </v-tab-item>
         </v-tabs-items>
@@ -32,7 +32,7 @@
 
 
 <script>
-import HouseTab from '@/components/Profile/HouseTab'
+import HouseTabUserPage from '@/components/Profile/HouseTabUserPage'
 import UserProfileCard from '@/components/Profile/UserProfileCard'
 export default {
     data: () => ({
@@ -53,23 +53,24 @@ export default {
                 href: ''
             },
         ],
+        uid: null,
         date: new Date()
     }),
 
     async mounted() {
-        const id = this.$route.params.id
+        this.uid = this.$route.params.id
         this.breadcrumbs[2] = {
-            text: id,
+            text: this.uid,
             disabled: false,
-            href: '/users/' + id
+            href: '/users/' + this.uid
         }
-        this.userInfo = await this.$store.dispatch('fetchUserById', id)
+        this.userInfo = await this.$store.dispatch('fetchUserById', this.uid)
     },
 
 
     components: {
         UserProfileCard,
-        HouseTab
+        HouseTabUserPage
     }
 }
 </script>
