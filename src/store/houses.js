@@ -14,15 +14,20 @@ export default {
         async saveDecision({dispatch, commit}, decision) {
             try {
                 const uid = await dispatch('getUid')
+                const house = (await firebase.database().ref(`/houses/${decision.id}`).once('value')).val()
                 await firebase.database().ref(`/houses/${decision.id}/decision`).update(decision)
-                await firebase.database().ref(`/houses/${decision.id}/`).update({
-                    status: decision.decision == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
-                })
-                await firebase.database().ref(`/houses/${decision.id}/`).update({
-                    status: 'В работе',
-                    takenUser: uid,
-                    takenDate: new Date().toJSON()
-                })
+                if(house.takenUser) {
+                    await firebase.database().ref(`/houses/${decision.id}/`).update({
+                        status: decision.decision == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
+                    })
+                } else {
+                    await firebase.database().ref(`/houses/${decision.id}/`).update({
+                        status: decision.decision == "Больше не звонить, назначенна встреча" ? "Выполнено" : "В работе",
+                        takenUser: uid,
+                        takenDate: new Date().toJSON()
+                    })
+                }
+                
             } catch (e) {
                 throw e
             }
