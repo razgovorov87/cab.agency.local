@@ -157,13 +157,21 @@ export default {
         if(idx != -1) {
             return this.users[idx].info.name + ' ' + this.users[idx].info.secondName
         }
-      }
+      },
+      closeGroup() {
+            Object.keys(this.$refs).forEach(k => {
+                this.$refs[k].$el.click()
+            })
+        },
   },
 
   async mounted() {
     this.users = await this.$store.dispatch('fetchUsers')
     this.items = await this.$store.dispatch("fetchHouses")
     this.loading = false
+    setTimeout(() => {
+        this.closeGroup()
+    }, 300)
   },
 
 
