@@ -51,7 +51,7 @@
 
         <v-dialog v-model="stepperDialog" persistent>
             <v-card>
-                <ProjectStepper v-bind:house="stepperHouse" v-bind:step="stepperStep" @success="refresh" @closeDialog="stepperDialog = false" :key="stepperHouse"/>
+                <ProjectStepper v-bind:house="stepperHouse" v-bind:step="stepperStep" @success="refresh" @closeDialog="stepperDialog = false" :key="stepperRefresh"/>
             </v-card>
         </v-dialog>
     </div>
@@ -67,7 +67,8 @@ export default {
         loading: true,
         refreshHouseTab: null,
         stepperDialog: false,
-        stepperStep: 1
+        stepperStep: 1,
+        stepperRefresh: 0
     }),
 
     async mounted() {
@@ -80,6 +81,7 @@ export default {
         async takenNewProject() {
             this.stepperHouse = await this.$store.dispatch('takenNewProject')
             this.stepperStep = 1
+            this.stepperRefresh++
             this.stepperDialog = true
         },
         async refresh() {
@@ -92,6 +94,7 @@ export default {
         editHouse(house) {
             this.stepperHouse = house
             this.stepperStep = 2
+            this.stepperRefresh++
             this.stepperDialog = true
         }
     },

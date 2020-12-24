@@ -119,7 +119,7 @@
             Изменить
           </v-btn>
         </div>
-        <v-btn rounded :href="house.link" color="primary" style="width: 64px; display: table-cell;" class="mr-2">
+        <v-btn rounded :href="house.link" target="__blank" color="primary" style="width: 64px; display: table-cell;" class="mr-2">
           <v-icon color="white">mdi-open-in-new</v-icon>
         </v-btn>
       </div>
