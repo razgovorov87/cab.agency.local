@@ -400,21 +400,9 @@ export default {
 
 
 
-        if(this.select != 'Больше не звонить, назначенна встреча' || this.select != 'Перезвонить через N дней') {
+        if(this.select == 'Больше не звонить, назначенна встреча' || this.select == 'Перезвонить через N дней') {
 
-          const info = {
-            id: this.house.id,
-            decision: this.select,
-            comment: this.comment
-          }
-          try {
-            await this.$store.dispatch('archiveHouse', info)
-            this.$emit("success");
-          } catch (e) {
-            console.log(e)
-          }
-
-        } else {
+          console.log('Сохранено!')
 
           this.loadingBtn = true;
         
@@ -440,6 +428,22 @@ export default {
             }
           } catch (e) {
             console.log(e);
+          }
+
+        } else {
+          console.log('Архивация!')
+
+
+          const info = {
+            id: this.house.id,
+            decision: this.select,
+            comment: this.comment
+          }
+          try {
+            await this.$store.dispatch('archiveHouse', info)
+            this.$emit("success");
+          } catch (e) {
+            console.log(e)
           }
 
         }
