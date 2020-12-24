@@ -51,7 +51,7 @@
 
         <v-dialog v-model="stepperDialog" persistent>
             <v-card>
-                <ProjectStepper v-bind:house="stepperHouse" @success="refresh" @closeDialog="stepperDialog = false"/>
+                <ProjectStepper v-bind:house="stepperHouse" @success="refresh" @closeDialog="stepperDialog = false" :key="stepperHouse"/>
             </v-card>
         </v-dialog>
     </div>

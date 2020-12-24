@@ -120,13 +120,6 @@
           >{{ house.link.slice(0, 40) + "..." }}</a
         >
       </div>
-      <v-img
-        src="https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-        width="100%"
-        height="250px"
-        class="pa-3"
-      >
-      </v-img>
       <v-card-text class="d-flex justify-space-between">
         <v-chip color="primary"
           >Перезвонить {{ house.decision.daysCall | date("fullmonthDay") }} в
