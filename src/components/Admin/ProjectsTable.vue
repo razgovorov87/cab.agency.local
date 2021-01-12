@@ -31,16 +31,8 @@
                 <td>
                     <v-chip label color="primary">Назначена встреча {{item.decision.dateMeeting | date('fullmonthDay')}} с {{item.decision.whoMeeting}}</v-chip>
                 </td>
-                <td v-if="item.info.rentPrice">{{item.info.rentPrice | currency}}</td>
-                <td v-else>
-                    <v-icon color="error">mdi-close</v-icon>
-                </td>
-                <td v-if="item.info.salePrice">{{item.info.salePrice | currency}}</td>
-                <td v-else>
-                    <v-icon color="error">mdi-close</v-icon>
-                </td>
-                <td>{{item.info.bedrooms}}</td>
-                <td>{{item.info.bethrooms}}</td>
+                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
+                <td colspan="2">Взято в работу: {{ item.takenDate | date('fullmonthDayPlusTime') }}</td>
                 <td>
                     <v-btn icon x-small class="mr-1">
                         <v-icon color="warning" @click="editItem(item, item.id)">mdi-pencil</v-icon>
@@ -58,7 +50,7 @@
                     <v-chip label color="primary" v-if="item.decision.decision == 'Перезвонить через N дней'">Перезвонить {{item.decision.daysCall | date('fullmonthDay')}} в {{item.decision.timeCall}}</v-chip>
                 </td>
                 <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
-                <td colspan="2"></td>
+                <td colspan="2">Взято в работу: {{ item.takenDate | date('fullmonthDayPlusTime') }}</td>
                 <td>
                     <v-btn icon x-small class="mr-1">
                         <v-icon color="warning" @click="editItem(item, item.id)">mdi-pencil</v-icon>
