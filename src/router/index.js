@@ -63,18 +63,12 @@ router.beforeEach( async (to, from, next) => {
   if(requireAuth && !currentUser) {
     next('/auth')
   }
-  else {
-    if(requireInfo) {
-      const info = (await firebase.database().ref(`/users/${currentUser.uid}/info`).once('value')).val()
-      if( !info ) {
-        next('/getinfo')
-      }
-      else {
-        next()
-      }
-    }
-    next()
-  }
+  else if(requireInfo) {
+    const info = (await firebase.database().ref(`/users/${currentUser.uid}/info`).once('value')).val()
+    if(!info.name) next('/getinfo')
+    else next()
+  } 
+  else next()
 
 })
 

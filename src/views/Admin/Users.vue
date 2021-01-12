@@ -39,14 +39,8 @@
                 </v-tooltip>
             </template>
 
-            <template v-slot:item.info.socialLinks="{ item }">
-                <v-btn icon v-if="item.info.socialLinks.vk">
-                    <v-icon>mdi-vk</v-icon>
-                </v-btn>
-                <v-btn icon v-if="item.info.socialLinks.telegram">
-                    <v-icon>mdi-telegram</v-icon>
-                </v-btn>
-                <span v-if="!item.info.socialLinks.vk && !item.info.socialLinks.telegram" class="caption grey--text">Неизвестно</span>
+            <template v-slot:item.info.regDate="{ item }">
+                <span v-if="item.info.regDate">{{ item.info.regDate | date('fullmonthDayPlusTime') }}</span>
             </template>
 
             <template v-slot:item.info.verify="{ item }">
@@ -57,6 +51,19 @@
             <template v-slot:item.info.isAdmin="{ item }">
                 <v-icon v-if="item.info.isAdmin" color="success">mdi-check</v-icon>
                 <v-icon v-else color="error">mdi-close</v-icon>
+            </template>
+
+            <template v-slot:item.actions="{ item }">
+                <v-tooltip left>
+                    <template v-slot:activator="{ on }"> 
+                        <v-btn icon v-on="on">
+                            <v-hover v-slot="{ hover }">
+                                <v-icon :color="hover ? 'error' : ''">mdi-account-cancel</v-icon>
+                            </v-hover>
+                        </v-btn>
+                    </template>
+                    <span>Заблокировать</span>
+                </v-tooltip>
             </template>
         </v-data-table>
 
@@ -94,11 +101,13 @@ export default {
             {text: '', value: 'passport', sortable: false},
             {text: 'Имя', value: 'info.name'},
             {text: 'Фамилия', value: 'info.secondName'},
-            {text: 'Город', value: 'info.city', sortable: false},
+            {text: 'Город', value: 'info.city'},
             {text: 'Email', value: 'info.email', sortable: false},
-            {text: 'Социальные ссылки', value: 'info.socialLinks', sortable: false},
-            {text: 'Подтвержден?', value: 'info.verify', sortable: false},
-            {text: 'Права администратора?', value: 'info.isAdmin', sortable: false},
+            {text: 'Телефон', value: 'info.phone', sortable: false},
+            {text: 'Дата регистрации', value: 'info.regDate'},
+            {text: 'Подтвержден?', value: 'info.verify'},
+            {text: 'Права администратора?', value: 'info.isAdmin'},
+            {text: '', value: 'actions'},
         ],
         breadcrumbs: [
             {

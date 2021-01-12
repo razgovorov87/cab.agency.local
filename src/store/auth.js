@@ -15,7 +15,7 @@ export default {
                 const uid = await dispatch('getUid')
                 await firebase.database().ref(`/users/${uid}/info`).set({
                     email,
-                    regDate: new Date()
+                    regDate: new Date().toJSON()
                 })
             } catch (e) {throw e}
         },

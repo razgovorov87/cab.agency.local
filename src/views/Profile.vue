@@ -66,8 +66,7 @@ export default {
             },
             {
                 text: 'Мой профиль',
-                disabled: false,
-                href: 'profile'
+                disabled: true,
             },
         ],
         date: new Date(),
