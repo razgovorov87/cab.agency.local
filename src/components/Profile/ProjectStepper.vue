@@ -30,9 +30,9 @@
               продавцом и заполнить всю информацию о проекте, а так же вынести
               решение.
             </p>
-            <a class="display-1 my-5" :href="house.link" target="__blank">{{
-              house.link.slice(0, 53) + "..."
-            }}</a>
+            <a class="display-1 my-5" :href="house.link" target="__blank">
+              <span v-if="house.link">{{ house.link.slice(0, 53) + "..."}}</span>
+            </a>
           </div>
         </v-card>
         <div class="d-flex justify-end">
@@ -352,6 +352,7 @@ export default {
 
   mounted() {
     this.stepper = this.step
+    console.log(this.house, this.step)
   },
 
   methods: {
@@ -411,6 +412,7 @@ export default {
         
           const decision = {
             id: this.house.id,
+            link: this.house.link,
             decision: this.select,
             daysCall: this.daysCall,
             timeCall: this.timeCall,
