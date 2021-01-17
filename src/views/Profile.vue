@@ -28,7 +28,7 @@
             <v-tabs-items v-model="tab" class="pa-3">
                 <v-tab-item>
                     <div v-if="userInfo && !userInfo.verify" class="d-flex justify-center pt-3">
-                        <v-chip class="subtitle-2" color="warning">Для начала работы Вам необходимо загрузить фото паспорта в настройках профиля</v-chip>
+                        <v-chip class="subtitle-2" color="warning">Для начала работы Вам необходимо загрузить личное фото в настройках профиля</v-chip>
                     </div>
                     <HouseTab v-else/>
                 </v-tab-item>

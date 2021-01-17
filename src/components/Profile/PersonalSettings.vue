@@ -116,7 +116,7 @@
 
                         <v-row>
                             <v-col cols="4" align-self="center">
-                                <p class="text-right ma-0">Первая страница паспорта</p>
+                                <p class="text-right ma-0">Личное фото</p>
                             </v-col>
                             <v-col cols="7">
                                 <v-file-input
@@ -133,7 +133,7 @@
                             </v-col>
                         </v-row>
 
-                        <v-row>
+                        <!-- <v-row>
                             <v-col cols="4" align-self="center">
                                 <p class="text-right ma-0">Вторая страница паспорта</p>
                             </v-col>
@@ -151,7 +151,7 @@
                                 >
                                 </v-file-input>
                             </v-col>
-                        </v-row>
+                        </v-row> -->
 
                         <v-row>
                             <v-col cols="7" offset="4">
