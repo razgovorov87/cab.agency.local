@@ -49,14 +49,11 @@ export default {
               const uid = await dispatch('getUid') 
               await firebase.database().ref(`/users/${uid}/info`).update(formData)
 
-              if(passport.passportFront && passport.passportTwo) {
+              if(passport.passportFront) {
                 await firebase.storage().ref(`/users/${uid}/passportFront`).put(passport.passportFront)
                 const passportFront = await firebase.storage().ref(`/users/${uid}/passportFront`).getDownloadURL()
-                await firebase.storage().ref(`/users/${uid}/passportTwo`).put(passport.passportTwo)
-                const passportTwo = await firebase.storage().ref(`/users/${uid}/passportTwo`).getDownloadURL()
                 await firebase.database().ref(`/users/${uid}/info/passport`).update({
-                    passportFront,
-                    passportTwo
+                    passportFront
                 })
                 
                 await firebase.database().ref(`/users/${uid}/info`).update({
