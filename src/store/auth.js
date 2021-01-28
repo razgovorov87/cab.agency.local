@@ -6,6 +6,11 @@ export default {
         async login({dispatch, commit}, {email, password}) {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password)
+                const user = firebase.auth().currentUser
+                const response = (await firebase.database().ref(`/archive/users/${user.uid}`).once('value')).val()
+                if( response ) {
+                    return 'banned'
+                } 
             } catch (e) {throw e}
         },
 
@@ -35,7 +40,7 @@ export default {
                         vk: formData.socialLinks.vk
                     },
                     isAdmin: false,
-                    verify: false
+                    verify: true
                 })
                 // await dispatch('addNotification', {
                 //     uid,

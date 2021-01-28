@@ -56,7 +56,7 @@
             <template v-slot:item.actions="{ item }">
                 <v-tooltip left>
                     <template v-slot:activator="{ on }"> 
-                        <v-btn icon v-on="on">
+                        <v-btn icon v-on="on" @click="showDeleteUserDialog(item)">
                             <v-hover v-slot="{ hover }">
                                 <v-icon :color="hover ? 'error' : ''">mdi-account-cancel</v-icon>
                             </v-hover>
@@ -67,7 +67,7 @@
             </template>
         </v-data-table>
 
-        <v-dialog v-model="passportDialog" v-if="selectableUser">
+        <v-dialog v-model="passportDialog" v-if="selectableUser && passportDialog">
             <v-card>
                 <v-card-title>
                     Паспорта пользователя: <v-chip class="ml-2">{{selectableUser.info.name + ' ' + selectableUser.info.secondName}}</v-chip>
@@ -88,12 +88,30 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
+
+        <v-dialog v-model="deleteUserDialog" max-width="600px" v-if="selectableUser && deleteUserDialog">
+            <v-card>
+                <v-card-title>Удаление пользователя</v-card-title>
+                <v-card-text>
+                    Вы действительно хотите удалить <span class="font-weight-bold">{{ selectableUser.info.name + ' ' + selectableUser.info.secondName }}</span>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="error" @click="deleteUserDialog = false">Отмена</v-btn>
+                    <v-btn color="success" @click="deleteUser()">Удалить</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-card>
+
+    
+    <Snackbar v-bind:options="snackbarOptions" :key="snackbarOptions"/>
 
   </div>
 </template>
 
 <script>
+import Snackbar from '@/components/Snackbar'
 export default {
     data: () => ({
         headers: [
@@ -128,19 +146,40 @@ export default {
         loading: true,
         users: [],
         passportDialog: false,
-        selectableUser: null
+        selectableUser: null,
+        deleteUserDialog: false,
+        snackbarOptions: null,
   }),
 
   methods: {
       openPassportDialog(user) {
           this.selectableUser = user
           this.passportDialog = true
+      },
+
+      showDeleteUserDialog(user) {
+          this.selectableUser = user
+          this.deleteUserDialog = true
+      },
+
+      async deleteUser() {
+        await this.$store.dispatch('deleteUser', this.selectableUser)
+        this.snackbarOptions = {
+            status: true,
+            text: 'Пользователь успешно удален',
+            color: 'success'
+        }
+        this.deleteUserDialog = false
       }
   },
 
   async mounted() {
       this.users = await this.$store.dispatch('fetchUsers')
       this.loading = false
+  },
+
+  components: {
+      Snackbar
   }
 }
 </script>

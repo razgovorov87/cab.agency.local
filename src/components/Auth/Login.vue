@@ -75,7 +75,17 @@ export default {
 
                 
                 try {
-                    await this.$store.dispatch('login', formData)
+                    const response = await this.$store.dispatch('login', formData)
+                    if( response === 'banned') {
+                        await this.$store.dispatch('logout')
+                        this.snackbar = {
+                            status: true,
+                            text: 'Ваша учетная запись не активна, свяжитесь с администратором',
+                            color: 'error'
+                        }
+                        this.btnLoading = false
+                        return
+                    }
                     this.$router.push('/')
                 } catch (e) {
                     const msg = errors[e.code]
