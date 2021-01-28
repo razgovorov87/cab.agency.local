@@ -93,7 +93,7 @@ export default {
             this.recaptcha = response
         },
         async registerUser() {
-            if( this.$refs.registerform.validate()  )  {
+            if( this.$refs.registerform.validate() && this.recaptcha )  {
                 this.btnLoading = true
                 const formData = {
                     name: this.name,

@@ -31,7 +31,8 @@
                 <td>
                     <v-chip label color="primary">Назначена встреча {{item.decision.dateMeeting | date('fullmonthDay')}} с {{item.decision.whoMeeting}}</v-chip>
                 </td>
-                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
+                <td v-if="getTakenUser" colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
+                <td v-else colspan="2">Пользователь удален</td>
                 <td colspan="2">Взято в работу: {{ item.takenDate | date('fullmonthDayPlusTime') }}</td>
                 <td>
                     <v-btn icon x-small class="mr-1">
@@ -49,7 +50,8 @@
                 <td>
                     <v-chip label color="primary" v-if="item.decision.decision == 'Перезвонить через N дней'">Перезвонить {{item.decision.daysCall | date('fullmonthDay')}} в {{item.decision.timeCall}}</v-chip>
                 </td>
-                <td colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
+                <td v-if="getTakenUser" colspan="2">Исполнитель: <router-link :to="'/users/' + item.takenUser">{{getTakenUser(item.takenUser)}}</router-link></td>
+                <td v-else colspan="2">Пользователь удален</td>
                 <td colspan="2">Взято в работу: {{ item.takenDate | date('fullmonthDayPlusTime') }}</td>
                 <td>
                     <v-btn icon x-small class="mr-1">

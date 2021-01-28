@@ -15,7 +15,7 @@
     </v-card>
 
     <v-card>
-        <v-data-table :headers="headers" :items="users">
+        <v-data-table :headers="headers" :items="users" :key="users">
 
             <template v-slot:item.profile="{ item }">
                 <v-tooltip top>
@@ -170,6 +170,9 @@ export default {
             color: 'success'
         }
         this.deleteUserDialog = false
+        this.loading = true
+        this.users = await this.$store.dispatch('fetchUsers')
+        this.loading = false
       }
   },
 
