@@ -338,7 +338,8 @@ export default {
       'Квартира сдана/продана',
       'Больше не звонить и удалить из базы',
       'Перезвонить через N дней',
-      'Больше не звонить, назначенна встреча'
+      'Больше не звонить, назначенна встреча',
+      'Не отвечает'
     ],
     selectRules: [(v) => !!v || "Обязательное поле"],
     dateMeeting: '',
@@ -352,7 +353,6 @@ export default {
 
   mounted() {
     this.stepper = this.step
-    console.log(this.house, this.step)
   },
 
   methods: {
@@ -434,6 +434,15 @@ export default {
           } catch (e) {
             console.log(e);
           }
+
+        } else if (this.select == 'Не отвечает') {
+
+          console.log('Перенесено!')
+
+          const id = this.house.id
+          this.$store.dispatch('reloadHouse', id)
+          this.loadingBtn = false;
+          this.$emit("success");
 
         } else {
           console.log('Архивация!')

@@ -6,12 +6,16 @@ export default {
         async login({dispatch, commit}, {email, password}) {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password)
-                const user = firebase.auth().currentUser
-                const response = (await firebase.database().ref(`/archive/users/${user.uid}`).once('value')).val()
-                if( response ) {
-                    return 'banned'
-                } 
+                dispatch('checkBan')
             } catch (e) {throw e}
+        },
+
+        async checkBan({dispatch, commit}) {
+            const user = firebase.auth().currentUser
+            const response = (await firebase.database().ref(`/archive/users/${user.uid}`).once('value')).val()
+            if( response ) {
+                return 'banned'
+            } 
         },
 
         async register({dispatch, commit}, {email, password}) {

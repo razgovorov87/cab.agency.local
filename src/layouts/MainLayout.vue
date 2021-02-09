@@ -119,6 +119,7 @@ export default {
   }),
 
   async mounted() {
+    this.checkBan()
     if(!Object.keys(this.$store.getters.info).length) {
       await this.$store.dispatch('fetchUserInfo')
     }
@@ -126,6 +127,14 @@ export default {
   },
 
   methods: {
+
+    async checkBan() {
+      const response = await this.$store.dispatch('checkBan')
+      if( response === 'banned') {
+          await this.$store.dispatch('logout')   
+          this.$router.push('/auth')
+      }
+    },
 
     async logout() {
       try {

@@ -161,5 +161,15 @@ export default {
             }
         },
 
+        async reloadHouse({dispatch, commit}, id) {
+            try {
+                const house = (await firebase.database().ref(`/houses/${id}`).once('value')).val()
+                await firebase.database().ref(`/houses/${id}`).remove()
+                await firebase.database().ref(`/houses/`).push(house)
+            } catch (e) {
+                throw e
+            }
+        },
+
     },
 }
