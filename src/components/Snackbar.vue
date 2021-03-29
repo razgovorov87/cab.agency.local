@@ -5,8 +5,15 @@
         :color="options.color"
         bottom
         right
+        class="d-flex"
     >
-    {{options.text}}
+        <div class="d-flex justify-between items-center">
+            <span>{{options.text}}</span>
+            <v-btn v-if="options.type === 'emailVerifed' && options.type" class="ml-4">
+                Подтвердить
+            </v-btn>
+        </div>
+        
     </v-snackbar>
 </template>
 

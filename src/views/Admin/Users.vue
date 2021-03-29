@@ -104,7 +104,6 @@
         </v-dialog>
     </v-card>
 
-    
     <Snackbar v-bind:options="snackbarOptions" :key="snackbarOptions"/>
 
   </div>

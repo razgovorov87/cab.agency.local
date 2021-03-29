@@ -61,6 +61,7 @@
 
 <script>
 export default {
+    props: ['userInfo'],
     data: () => ({
         uid: null,
         name: '',
@@ -91,7 +92,7 @@ export default {
             if(this.$refs.getinfoform.validate()) {
                 try {
                     this.btnLoading = true
-                    const formData = {
+                    let formData = {
                         uid: this.uid,
                         name: this.name,
                         secondName: this.secondName,
@@ -104,7 +105,15 @@ export default {
                     }
 
                     await this.$store.dispatch('saveUserInfo', formData)
-                    this.$router.push('/')
+                    const email = await this.$store.dispatch('fetchEmail')
+                    formData = {
+                        email
+                    }
+                    this.$router.push({
+                        name: 'Подтверждение почты',
+                        path: '/emailVerify',
+                        params: {formData}
+                    })
                 } catch (e) {
                     console.log(e)
                 }

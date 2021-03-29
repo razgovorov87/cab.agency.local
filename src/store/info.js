@@ -25,6 +25,16 @@ export default {
             }
         },
 
+        async fetchEmail({dispatch, commit}) {
+            try {
+              const uid = await dispatch('getUid')
+              const info = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
+              return info.email ? info.email : null 
+            } catch (e) {
+                throw e
+            }
+        },
+
         async fetchUsers({dispatch, commit}) {
             try {
               const info = (await firebase.database().ref(`/users/`).once('value')).val()

@@ -6,8 +6,17 @@ export default {
         async login({dispatch, commit}, {email, password}) {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password)
-                dispatch('checkBan')
+                const res = dispatch('checkBan')
+                if(res) return res
             } catch (e) {throw e}
+        },
+
+        async checkVerify({dispatch, commit}) {
+            const user = firebase.auth().currentUser
+            return user.emailVerified
+            // if( response ) {
+            //     return 'banned'
+            // } 
         },
 
         async checkBan({dispatch, commit}) {
@@ -29,6 +38,19 @@ export default {
             } catch (e) {throw e}
         },
 
+        async sendEmailVerify({dispatch, commit}, {email, password}) {
+            try {
+                if(email && password) {
+                    await firebase.auth().signInWithEmailAndPassword(email, password)
+                }
+                const user = firebase.auth().currentUser
+                user.sendEmailVerification()
+                dispatch('logout')
+            } catch (e) {
+                throw e
+            }
+        },
+
         async saveUserInfo({dispatch, commit}, formData) {
             try {
                 const user = firebase.auth().currentUser
@@ -43,8 +65,7 @@ export default {
                         telegram: formData.socialLinks.telegram,
                         vk: formData.socialLinks.vk
                     },
-                    isAdmin: false,
-                    verify: true
+                    isAdmin: false
                 })
                 // await dispatch('addNotification', {
                 //     uid,

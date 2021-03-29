@@ -1,6 +1,6 @@
 <template>
     <div id="login">
-        <v-form class="px-7 pa-5" ref="registerform" lazy-validation v-model="registerForm">
+        <v-form class="px-7 pa-5" ref="registerform" lazy-validation v-model="registerForm" @submit.prevent="registerUser">
 
             <span class="overline">Email</span>
             <v-text-field

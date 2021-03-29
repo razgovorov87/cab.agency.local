@@ -18,6 +18,20 @@ const routes = [
     component: () => import('../views/Auth/GetInfo.vue')
   },
   {
+    path: '/emailVerify',
+    name: 'Подтверждение почты',
+    meta: {layout: 'auth'},
+    props: true,
+    component: () => import('../views/Auth/EmailVerify.vue')
+  },
+  {
+    path: '/resetPassword',
+    name: 'Сброс пароля',
+    meta: {layout: 'auth'},
+    props: true,
+    component: () => import('../views/Auth/ResetPassword.vue')
+  },
+  {
     path: '/',
     name: 'Profile',
     meta: {layout: 'main', auth: true, info: true},

@@ -6,14 +6,6 @@
 
 <script>
 export default {
-    
-    async mounted() {
-      const response = await this.$store.dispatch('checkBan')
-      if( response === 'banned') {
-          await this.$store.dispatch('logout')   
-          this.$router.push('/auth')
-      }
-    }
 
 }
 </script>
